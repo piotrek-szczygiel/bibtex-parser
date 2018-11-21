@@ -1,15 +1,42 @@
-@String{ref = "Referencja" }
+@preamble{ "\newcommand{\noopsort}[1]{} "
+# "\newcommand{\printfirst}[2]{#1} "
+# "\newcommand{\singleletter}[1]{#1} "
+# "\newcommand{\switchargs}[2]{#2#1} " }
+
+@string{ref = "Referencja",multiline ={
+multiline
+text :)
+}}
+
+@test{test,STOC-key = "OX{\singleletter{stoc}}", xd = ":)"}}
+
+@2test2{test,STOC-key = "OX{\singleletter{stoc}}", xd = ":)"}}
+
+Komentarze powinny być ignorowane
 
 @ARTICLE{article-full,
-    author = "L[eslie] A. Aamport",
-    title = "The Gnats and Gnus Document Preparation System",
-    journal = "\mbox{G-Animal's} Journal",
+author = "L[eslie] A. Aamport | Piotr Szczygieł",
+title = {The Gnats and Gnus Document Preparation System},
+journal = {\mbox { G-Animal's } Journal},
     year = 1986,
     volume = 41,
     number = 7,
     pages = "73+",
     month = jul,
-    note = "This is a full ARTICLE entry"
+xd = "ala ma " # ref,
+note = {The entire issue is devoted to gnats and gnus
+ (this entry is a cross-referenced ARTICLE (journal))},
 }
 
-@TYPREKORDU{klucz_cytowania,liczba = 123,string = "ala ma {kota}",referencja = ref }
+
+@TYPREKORDU{klucz_cytowania,liczba = 123,string = "ala ma {kota}",string_b = {ala ma { psa }}, referencja = ref }
+
+
+@MISC{random-note-crossref,
+key = {Volume-2},
+note = {
+Volume~2 is "listed" under Knuth
+ \cite { book-full }
+},
+multi = multiline
+}

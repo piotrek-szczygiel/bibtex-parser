@@ -4,18 +4,26 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class PatternMatcher {
-    private Pattern patternEntry, patternField, patternString, patternNumber, patternReference;
+    private Pattern patternEntry, patternEntryBeginning, patternField, patternString,
+            patternNumber, patternReference, patternConcatenation;
 
     PatternMatcher() {
-        patternEntry = Pattern.compile("(?s)(?m)^@(\\w+)\\s*\\{\\s*([\\w-]+)\\s*((.)*?)}\\s*$");
-        patternField = Pattern.compile("\\s*,\\s*(([^,\\r\\n])*)\\s*");
-        patternString = Pattern.compile("\\s*(\\w+)\\s*=\\s*[\"{]((.)*)[\"}]\\s*");
-        patternNumber = Pattern.compile("\\s*(\\w+)\\s*=\\s*(\\d+)\\s*");
-        patternReference = Pattern.compile("\\s*(\\w+)\\s*=\\s*([a-zA-Z]+)\\s*");
+        patternEntry = Pattern.compile("(?s)(?m)^@([a-zA-Z_][\\w-]*)\\s*\\{(?:\\s*([a-zA-Z_][\\w-]*)\\s*,\\s*)?((.)*)" +
+                "\\s*}");
+        patternEntryBeginning = Pattern.compile("(?m)^@([a-zA-Z_][\\w-]*).*");
+        patternField = Pattern.compile("\\s*(([^,])*),?\\s*");
+        patternString = Pattern.compile("(?s)\\s*([a-zA-Z_][\\w-]*)\\s*=\\s*[\"{]((.)*)[\"}]\\s*$");
+        patternNumber = Pattern.compile("\\s*([a-zA-Z_][\\w-]*)\\s*=\\s*(\\d+)\\s*$");
+        patternReference = Pattern.compile("\\s*([a-zA-Z_][\\w-]*)\\s*=\\s*([a-zA-Z_][\\w-]*)\\s*$");
+        patternConcatenation = Pattern.compile("(?s)\\s*([a-zA-Z_][\\w-]*)\\s*=\\s*((.)*#(.)*)\\s*$");
     }
 
     Matcher matchEntry(String input) {
         return patternEntry.matcher(input);
+    }
+
+    Matcher matchEntryBeginning(String input) {
+        return patternEntryBeginning.matcher(input);
     }
 
     Matcher matchField(String input) {
@@ -32,5 +40,9 @@ class PatternMatcher {
 
     Matcher matchReference(String input) {
         return patternReference.matcher(input);
+    }
+
+    Matcher matchConcatenation(String input) {
+        return patternConcatenation.matcher(input);
     }
 }

@@ -1,71 +1,42 @@
 package com.szczygiel.bibtex;
 
-public class Field {
-    private Type type;
+class Field {
     private String key;
-    private String stringValue;
-    private int numberValue;
-    private String referenceValue;
+
     private String raw;
+    private Object value;
+    private Type type = Type.UNKNOWN;
 
-    Field() {
-        type = Type.UNKNOWN;
+    String getRaw() {
+        return raw;
     }
 
-    boolean isString() {
-        return type == Type.STRING;
-    }
-
-    boolean isNumber() {
-        return type == Type.NUMBER;
-    }
-
-    boolean isReference() {
-        return type == Type.REFERENCE;
+    void setRaw(String raw_) {
+        raw = raw_;
     }
 
     String getKey() {
         return key;
     }
 
-    void setKey(String key) {
-        this.key = key;
+    void setKey(String key_) {
+        key = key_;
     }
 
-    String getRaw() {
-        return raw;
+    Object getValue() {
+        return value;
     }
 
-    void setRaw(String raw) {
-        this.raw = raw;
+    void setValue(Object value_) {
+        value = value_;
     }
 
-
-    String getString() {
-        return stringValue;
+    Type getType() {
+        return type;
     }
 
-    void setString(String string) {
-        type = Type.STRING;
-        stringValue = string;
-    }
-
-    int getNumber() {
-        return numberValue;
-    }
-
-    void setNumber(String number) {
-        type = Type.NUMBER;
-        numberValue = Integer.parseInt(number);
-    }
-
-    String getReference() {
-        return referenceValue;
-    }
-
-    void setReference(String reference) {
-        type = Type.REFERENCE;
-        referenceValue = reference;
+    void setType(Type type_) {
+        type = type_;
     }
 
     @Override
@@ -73,23 +44,26 @@ public class Field {
         String str = "";
         switch (type) {
             case STRING:
-                str += key + "(string) = " + stringValue;
+                str = key + "(string) = " + value;
                 break;
             case NUMBER:
-                str += key + "(number) = " + numberValue;
+                str = key + "(number) = " + value;
                 break;
             case REFERENCE:
-                str += key + "(reference) = " + referenceValue;
+                str = key + "(reference) = " + value;
+                break;
+            case CONCATENATION:
+                str = key + "(concatenation) = " + value;
                 break;
             case UNKNOWN:
-                str += "raw = '" + raw + "'";
+                str = key + "(unknown) = " + raw;
                 break;
         }
 
         return str;
     }
 
-    public enum Type {
-        STRING, NUMBER, REFERENCE, UNKNOWN
+    enum Type {
+        STRING, NUMBER, REFERENCE, CONCATENATION, UNKNOWN
     }
 }

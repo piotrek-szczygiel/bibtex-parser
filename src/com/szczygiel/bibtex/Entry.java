@@ -1,5 +1,7 @@
 package com.szczygiel.bibtex;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,7 @@ public class Entry {
         fields = new ArrayList<>();
     }
 
-    public String getEntryType() {
+    String getEntryType() {
         return entryType;
     }
 
@@ -31,15 +33,53 @@ public class Entry {
         this.citationKey = citationKey;
     }
 
-    boolean addField(Field field) {
-        return fields.add(field);
+    List<Field> getFields() {
+        return fields;
+    }
+
+    @Nullable
+    Field getField(String key) {
+        for (Field field : fields) {
+            if (field.getKey().equals(key)) {
+                return field;
+            }
+        }
+
+        return null;
+    }
+
+    void addField(Field field) {
+        fields.add(field);
+    }
+
+    void computeStrings(Strings strings) {
+        for (Field field : fields) {
+            if (field.getType() == Field.Type.REFERENCE) {
+                String reference = (String) field.getValue();
+                String value = strings.getString(reference);
+
+                field.setType(Field.Type.STRING);
+                field.setValue(value);
+            }
+        }
+
+        computeConcatenation(strings);
+    }
+
+    private void computeConcatenation(Strings strings) {
+        for (Field field : fields) {
+            if (field.getType() == Field.Type.CONCATENATION) {
+                String concatenation = (String) field.getValue();
+                // TODO: add concatenation
+            }
+        }
     }
 
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder(citationKey + "(" + entryType + ") =\n");
+        StringBuilder str = new StringBuilder(citationKey + "(" + entryType + ") =");
         for (Field field : fields) {
-            str.append("\t").append(field).append("\n");
+            str.append("\n\t").append(field);
         }
 
         return str.toString();
