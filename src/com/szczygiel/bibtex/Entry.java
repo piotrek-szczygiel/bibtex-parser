@@ -4,6 +4,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Entry {
     private String entryType;
@@ -66,11 +68,47 @@ public class Entry {
         computeConcatenation(strings);
     }
 
+    static private Pattern patternConcat = Pattern.compile("(?s)\\s*([\"{].*[\"}]|[a-zA-Z_][\\w-]*)\\s*(#)?\\s*");
+
     private void computeConcatenation(Strings strings) {
         for (Field field : fields) {
             if (field.getType() == Field.Type.CONCATENATION) {
+                StringBuilder finalValue = new StringBuilder();
                 String concatenation = (String) field.getValue();
-                // TODO: add concatenation
+
+                Matcher concatMatcher = patternConcat.matcher(concatenation);
+                while (concatMatcher.find()) {
+                    if (concatMatcher.groupCount() < 2) {
+                        break;
+                    }
+                    String value = concatMatcher.group(1);
+                    String hash = concatMatcher.group(2);
+
+                    if (value.startsWith("\"")) {
+                        if (!value.endsWith("\"")) {
+                            break;
+                        }
+
+                        value = value.substring(1, value.length() - 1);
+                    } else if (value.startsWith("{")) {
+                        if (!value.endsWith("}")) {
+                            break;
+                        }
+
+                        value = value.substring(1, value.length() - 1);
+                    } else {
+                        value = strings.getString(value);
+                    }
+
+                    finalValue.append(value);
+
+                    if (hash == null) {
+                        break;
+                    }
+                }
+
+                field.setType(Field.Type.STRING);
+                field.setValue(finalValue.toString());
             }
         }
     }
