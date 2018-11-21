@@ -6,6 +6,7 @@ public class Field {
     private String stringValue;
     private int numberValue;
     private String referenceValue;
+    private String raw;
 
     Field() {
         type = Type.UNKNOWN;
@@ -30,6 +31,15 @@ public class Field {
     void setKey(String key) {
         this.key = key;
     }
+
+    String getRaw() {
+        return raw;
+    }
+
+    void setRaw(String raw) {
+        this.raw = raw;
+    }
+
 
     String getString() {
         return stringValue;
@@ -60,16 +70,19 @@ public class Field {
 
     @Override
     public String toString() {
-        String str = key + "(";
+        String str = "";
         switch (type) {
             case STRING:
-                str += "string) = " + stringValue;
+                str += key + "(string) = " + stringValue;
                 break;
             case NUMBER:
-                str += "number) = " + numberValue;
+                str += key + "(number) = " + numberValue;
                 break;
             case REFERENCE:
-                str += "reference) = " + referenceValue;
+                str += key + "(reference) = " + referenceValue;
+                break;
+            case UNKNOWN:
+                str += "raw = '" + raw + "'";
                 break;
         }
 

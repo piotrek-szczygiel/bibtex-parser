@@ -9,7 +9,7 @@ class PatternMatcher {
     PatternMatcher() {
         patternEntry = Pattern.compile("(?s)(?m)^@(\\w+)\\s*\\{\\s*([\\w-]+)\\s*((.)*?)}\\s*$");
         patternField = Pattern.compile("\\s*,\\s*(([^,\\r\\n])*)\\s*");
-        patternString = Pattern.compile("\\s*(\\w+)\\s*=\\s*\"((.)*)\"\\s*");
+        patternString = Pattern.compile("\\s*(\\w+)\\s*=\\s*[\"{]((.)*)[\"}]\\s*");
         patternNumber = Pattern.compile("\\s*(\\w+)\\s*=\\s*(\\d+)\\s*");
         patternReference = Pattern.compile("\\s*(\\w+)\\s*=\\s*([a-zA-Z]+)\\s*");
     }

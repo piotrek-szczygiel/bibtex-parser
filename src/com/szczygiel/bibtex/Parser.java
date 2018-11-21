@@ -55,6 +55,12 @@ class Parser {
 
     private Field parseField(Matcher fieldMatcher) {
         String keyValue = fieldMatcher.group(1);
+        if (keyValue.equals("")) {
+            return null;
+        }
+
+        Field field = new Field();
+        field.setRaw(keyValue);
 
         Matcher stringMatcher = patternMatcher.matchString(keyValue);
         Matcher numberMatcher = patternMatcher.matchNumber(keyValue);
@@ -78,8 +84,6 @@ class Parser {
         }
 
         if (actualMatcher != null) {
-            Field field = new Field();
-
             key = actualMatcher.group(1);
             field.setKey(key);
 
@@ -96,10 +100,8 @@ class Parser {
                     field.setReference(value);
                     break;
             }
-
-            return field;
         }
 
-        return null;
+        return field;
     }
 }
