@@ -18,10 +18,13 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        // write your code here
-        String input = readFile("file1.bib");
-
         Parser parser = new Parser();
+        String input;
+
+//        input = readFile("file1.bib");
+//        parser.parse(input);
+
+        input = readFile("file2.bib");
         parser.parse(input);
 
     }

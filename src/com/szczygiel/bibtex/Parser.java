@@ -2,39 +2,104 @@ package com.szczygiel.bibtex;
 
 import java.util.regex.Matcher;
 
-public class Parser {
+class Parser {
     private PatternMatcher patternMatcher;
 
-    public Parser() {
+    Parser() {
         patternMatcher = new PatternMatcher();
     }
 
-    public void parse(String input) {
+    void parse(String input) {
         Matcher entryMatcher = patternMatcher.matchEntry(input);
 
         // Find an entry
         while (entryMatcher.find()) {
-            String entryType = entryMatcher.group(1);
-            String citationKey = entryMatcher.group(2);
-            String keyValueStructure = entryMatcher.group(3);
 
-            System.out.println(citationKey + "(" + entryType + ")");
+            // Parse it
+            Entry entry = parseEntry(entryMatcher);
+            if (entry == null) {
+                continue;
+            }
 
-            Matcher splitMatcher = patternMatcher.matchSplit(keyValueStructure);
+            System.out.println(entry);
+        }
+    }
 
-            // Find key value combination
-            while (splitMatcher.find()) {
-                String keyValue = splitMatcher.group(1);
-                System.out.println(keyValue);
+    private Entry parseEntry(Matcher entryMatcher) {
+        Entry entry = new Entry();
 
-                Matcher stringMatcher = patternMatcher.matchString(keyValue);
-                Matcher numberMatcher = patternMatcher.matchNumber(keyValue);
-                Matcher referenceMatcher = patternMatcher.matchReference(keyValue);
+        String entryType = entryMatcher.group(1);
+        entry.setEntryType(entryType);
 
-                while (stringMatcher.find()) {
-                    System.out.println("found string");
-                }
+        if (entryType.equals("String")) {
+            // TODO: handle @String
+            return null;
+        }
+
+        String citationKey = entryMatcher.group(2);
+        entry.setCitationKey(citationKey);
+
+        String keyValueStructure = entryMatcher.group(3);
+        Matcher fieldMatcher = patternMatcher.matchField(keyValueStructure);
+
+        // Find key value combination
+        while (fieldMatcher.find()) {
+            Field field = parseField(fieldMatcher);
+            if (field != null) {
+                entry.addField(field);
             }
         }
+
+        return entry;
+    }
+
+    private Field parseField(Matcher fieldMatcher) {
+        String keyValue = fieldMatcher.group(1);
+
+        Matcher stringMatcher = patternMatcher.matchString(keyValue);
+        Matcher numberMatcher = patternMatcher.matchNumber(keyValue);
+        Matcher referenceMatcher = patternMatcher.matchReference(keyValue);
+        Matcher actualMatcher = null;
+
+        String key;
+        String value;
+
+        Field.Type type = Field.Type.UNKNOWN;
+
+        if (stringMatcher.find()) {
+            actualMatcher = stringMatcher;
+            type = Field.Type.STRING;
+        } else if (numberMatcher.find()) {
+            actualMatcher = numberMatcher;
+            type = Field.Type.NUMBER;
+        } else if (referenceMatcher.find()) {
+            actualMatcher = referenceMatcher;
+            type = Field.Type.REFERENCE;
+        }
+
+        if (actualMatcher != null) {
+            Field field = new Field();
+
+            key = actualMatcher.group(1);
+            field.setKey(key);
+
+            value = actualMatcher.group(2);
+
+            switch (type) {
+                case STRING:
+                    field.setString(value);
+                    break;
+                case NUMBER:
+                    field.setNumber(value);
+                    break;
+                case REFERENCE:
+                    field.setReference(value);
+                    break;
+            }
+
+            return field;
+        }
+
+        return null;
     }
 }

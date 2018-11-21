@@ -3,34 +3,34 @@ package com.szczygiel.bibtex;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PatternMatcher {
-    private Pattern patternEntry, patternSplit, patternString, patternNumber, patternReference;
+class PatternMatcher {
+    private Pattern patternEntry, patternField, patternString, patternNumber, patternReference;
 
-    public PatternMatcher() {
-        patternEntry = Pattern.compile("(?s)(?m)^@(\\w+)\\s*\\{\\s*([\\w-]+)\\s*,\\s*((.)*?)^}$");
-        patternSplit = Pattern.compile("\\s*(([^,])*)\\s*,?\\s*");
-        patternString = Pattern.compile("\\s*(\\w+)\\s*=\\s*(\"(.)*\")\\s*");
+    PatternMatcher() {
+        patternEntry = Pattern.compile("(?s)(?m)^@(\\w+)\\s*\\{\\s*([\\w-]+)\\s*((.)*?)}\\s*$");
+        patternField = Pattern.compile("\\s*,\\s*(([^,\\r\\n])*)\\s*");
+        patternString = Pattern.compile("\\s*(\\w+)\\s*=\\s*\"((.)*)\"\\s*");
         patternNumber = Pattern.compile("\\s*(\\w+)\\s*=\\s*(\\d+)\\s*");
-        patternReference = Pattern.compile("\\s*(\\w+)\\s*=\\s*(\\w+)\\s*");
+        patternReference = Pattern.compile("\\s*(\\w+)\\s*=\\s*([a-zA-Z]+)\\s*");
     }
 
-    protected Matcher matchEntry(String input) {
+    Matcher matchEntry(String input) {
         return patternEntry.matcher(input);
     }
 
-    protected Matcher matchSplit(String input) {
-        return patternSplit.matcher(input);
+    Matcher matchField(String input) {
+        return patternField.matcher(input);
     }
 
-    protected Matcher matchString(String input) {
+    Matcher matchString(String input) {
         return patternString.matcher(input);
     }
 
-    protected Matcher matchNumber(String input) {
+    Matcher matchNumber(String input) {
         return patternNumber.matcher(input);
     }
 
-    protected Matcher matchReference(String input) {
+    Matcher matchReference(String input) {
         return patternReference.matcher(input);
     }
 }
