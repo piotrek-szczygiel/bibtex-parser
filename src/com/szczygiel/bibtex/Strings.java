@@ -4,9 +4,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Simple map extension for storing strings values.
+ * <p>
+ * Provides extracting strings values from Entry list.
+ */
 class Strings {
     private Map<String, String> strings = new HashMap<>();
 
+    /**
+     * Extracts strings from list of provided entries.
+     *
+     * @param entries list of all entries
+     */
     void extractFrom(List<Entry> entries) {
         for (Entry entry : entries) {
             if (!entry.getEntryType().equals("string")) {
@@ -18,7 +28,6 @@ class Strings {
                 String key = field.getKey();
                 if (strings.containsKey(key)) {
                     System.out.println("redefinition in @strings: " + field);
-                    continue;
                 }
 
                 if (field.getType() != Field.Type.STRING) {
@@ -27,13 +36,13 @@ class Strings {
                 }
 
                 String value = (String) field.getValue();
-                strings.putIfAbsent(key, value);
+                strings.put(key, value);
             }
         }
     }
 
     String getString(String key) {
-        return strings.getOrDefault(key, "");
+        return strings.get(key);
     }
 
     @Override

@@ -1,26 +1,32 @@
 package com.szczygiel.bibtex;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 
+/**
+ * Parses BiBteX input
+ */
 class Parser {
-    private PatternMatcher patternMatcher;
     private int lastEndingIndex = 0;
 
-    Parser() {
-        patternMatcher = new PatternMatcher();
-    }
-
+    /**
+     * Parses BiBteX input into list of Entry objects
+     *
+     * @param input BiBteX input
+     * @return list of Entry objects
+     */
     List<Entry> parse(String input) {
         List<Entry> entries = new ArrayList<>();
 
-        Matcher entryBeginningMatcher = patternMatcher.matchEntryBeginning(input);
+        Matcher entryBeginningMatcher = Patterns.entryBeginning.matcher(input);
         while (entryBeginningMatcher.find()) {
             String entryStr = cutEntry(entryBeginningMatcher, input);
-            Matcher entryMatcher = patternMatcher.matchEntry(entryStr);
+            if (entryStr == null) {
+                continue;
+            }
+
+            Matcher entryMatcher = Patterns.entry.matcher(entryStr);
 
             if (entryMatcher.find()) {
                 Entry entry = parseEntry(entryMatcher);
@@ -33,6 +39,15 @@ class Parser {
         return entries;
     }
 
+    /**
+     * Cuts entry until last bracket.
+     * <p>
+     * Allows for nested brackets.
+     *
+     * @param entryBeginningMatcher matcher used for finding beginning of an entry
+     * @param input                 BiBteX input
+     * @return single BiBteX entry
+     */
     private String cutEntry(Matcher entryBeginningMatcher, String input) {
         int matchStartIndex = entryBeginningMatcher.start();
         if (matchStartIndex < lastEndingIndex) {
@@ -60,7 +75,14 @@ class Parser {
         return entryStr.toString();
     }
 
-    @Nullable
+    /**
+     * Parses BiBteX entry into Entry object
+     * <p>
+     * Ignores @PREAMBLE and @COMMENT entries.
+     *
+     * @param entryMatcher matcher used for matching entry
+     * @return parsed Entry object
+     */
     private Entry parseEntry(Matcher entryMatcher) {
         Entry entry = new Entry();
 
@@ -95,37 +117,55 @@ class Parser {
             System.out.println("entry without key value structure: " + entryMatcher.group(0));
             return null;
         }
-        Matcher fieldMatcher = patternMatcher.matchField(keyValueStructure);
+        Matcher fieldMatcher = Patterns.field.matcher(keyValueStructure);
 
         // Find key value combination
         while (fieldMatcher.find()) {
-            Field field = parseField(fieldMatcher);
-            if (field != null) {
-                entry.addField(field);
+            if (fieldMatcher.groupCount() < 1) {
+                continue;
             }
+            String field_str = fieldMatcher.group(1);
+            Field field = parseField(field_str);
+            if (field == null) {
+                continue;
+            }
+
+            if (field.getType() == Field.Type.UNKNOWN) {
+                String raw = field.getRaw();
+                raw = raw.replaceAll("\\r\\n|\\r|\\n", "\n\t");
+                System.out.println("cannot parse field in entry " + entry.getCitationKey() + ":\n\t" + raw);
+                continue;
+            }
+
+            entry.addField(field);
         }
 
         return entry;
     }
 
-    @Nullable
-    private Field parseField(Matcher fieldMatcher) {
-        String keyValue = fieldMatcher.group(1);
-        if (keyValue == null || keyValue.equals("")) {
+    /**
+     * Parses BiBteX field into a Field object.
+     *
+     * @param input BiBteX field
+     * @return parsed Field object
+     */
+    private Field parseField(String input) {
+        input = input.strip();
+        if (input == null || input.equals("")) {
             return null;
         }
 
         Field field = new Field();
-        field.setRaw(keyValue);
+        field.setRaw(input);
 
         String key;
         Object value;
         Field.Type type;
 
-        Matcher stringMatcher = patternMatcher.matchString(keyValue);
-        Matcher numberMatcher = patternMatcher.matchNumber(keyValue);
-        Matcher referenceMatcher = patternMatcher.matchReference(keyValue);
-        Matcher concatenationMatcher = patternMatcher.matchConcatenation(keyValue);
+        Matcher stringMatcher = Patterns.string.matcher(input);
+        Matcher numberMatcher = Patterns.number.matcher(input);
+        Matcher referenceMatcher = Patterns.reference.matcher(input);
+        Matcher concatenationMatcher = Patterns.concatenation.matcher(input);
 
         // Match key value pair to string, number or reference
         Matcher actualMatcher;

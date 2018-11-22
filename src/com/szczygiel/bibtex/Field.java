@@ -1,5 +1,8 @@
 package com.szczygiel.bibtex;
 
+/**
+ * Stores information about field.
+ */
 class Field {
     private String key;
 
@@ -44,25 +47,28 @@ class Field {
         String str = "";
         switch (type) {
             case STRING:
-                str = key + "(string) = " + value;
+                str = key + "(string): " + value;
                 break;
             case NUMBER:
-                str = key + "(number) = " + value;
+                str = key + "(number): " + value;
                 break;
             case REFERENCE:
-                str = key + "(reference) = " + value;
+                str = key + "(reference): " + value;
                 break;
             case CONCATENATION:
-                str = key + "(concatenation) = " + value;
+                str = key + "(concatenation): " + value;
                 break;
             case UNKNOWN:
-                str = key + "(unknown) = " + raw;
+                str = key + "(unknown): " + raw;
                 break;
         }
 
         return str;
     }
 
+    /**
+     * Available types of fields.
+     */
     enum Type {
         STRING, NUMBER, REFERENCE, CONCATENATION, UNKNOWN
     }
