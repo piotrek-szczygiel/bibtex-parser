@@ -186,6 +186,7 @@ class Parser {
         }
 
         key = actualMatcher.group(1);
+        key = key.toLowerCase();
         field.setKey(key);
 
         String valueStr = actualMatcher.group(2);
