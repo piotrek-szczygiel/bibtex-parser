@@ -143,8 +143,7 @@ public class Entry {
         }
     }
 
-    @Override
-    public String toString() {
+    String toSimpleString() {
         StringBuilder str = new StringBuilder(citationKey + "(" + entryType + "): ");
         for (Field field : fields) {
             // Multiline string printing
@@ -155,5 +154,10 @@ public class Entry {
         }
 
         return str.toString();
+    }
+
+    @Override
+    public String toString() {
+        return PrettyFormat.table(this);
     }
 }
