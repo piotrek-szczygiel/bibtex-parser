@@ -41,10 +41,21 @@ class Strings {
         }
     }
 
+    /**
+     * Get string from Map data structure.
+     *
+     * @param key key of the string
+     * @return string or null if string was not found
+     */
     String getString(String key) {
         return strings.get(key);
     }
 
+    /**
+     * Converts strings database to readable list for debugging purposes.
+     *
+     * @return multiline readable string
+     */
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();

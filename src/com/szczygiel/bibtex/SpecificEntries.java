@@ -91,9 +91,9 @@ class SpecificEntries {
         List<String> requiredFields;
         List<String> optionalFields;
 
-        SpecificEntry(List<String> requiredFields_, List<String> optionalFields_) {
-            requiredFields = requiredFields_;
-            optionalFields = optionalFields_;
+        SpecificEntry(List<String> requiredFields, List<String> optionalFields) {
+            this.requiredFields = requiredFields;
+            this.optionalFields = optionalFields;
         }
     }
 }

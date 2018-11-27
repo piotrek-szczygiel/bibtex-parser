@@ -124,8 +124,8 @@ class Parser {
             if (fieldMatcher.groupCount() < 1) {
                 continue;
             }
-            String field_str = fieldMatcher.group(1);
-            Field field = parseField(field_str);
+            String fieldStr = fieldMatcher.group(1);
+            Field field = parseField(fieldStr);
             if (field == null) {
                 continue;
             }

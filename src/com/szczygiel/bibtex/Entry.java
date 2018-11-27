@@ -1,7 +1,6 @@
 package com.szczygiel.bibtex;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 
 /**
@@ -10,35 +9,86 @@ import java.util.regex.Matcher;
 public class Entry {
     private String entryType;
     private String citationKey;
+    private Set<String> authors;
 
     private List<Field> fields;
 
+    /**
+     * Constructor for Entry.
+     * <p>
+     * Initializes members with default values.
+     */
     Entry() {
         entryType = "";
         citationKey = "";
         fields = new ArrayList<>();
+        authors = new HashSet<>();
     }
 
+    /**
+     * Return entry type.
+     * <p>
+     * Entry type can be for example: "book"
+     *
+     * @return entry type
+     */
     String getEntryType() {
         return entryType;
     }
 
+    /**
+     * Set entry type.
+     *
+     * @param entryType entry type
+     */
     void setEntryType(String entryType) {
         this.entryType = entryType;
     }
 
+    /**
+     * Return citation key.
+     * <p>
+     * Citation key is defined like this: @TYPE{citation_key
+     *
+     * @return citation key
+     */
     String getCitationKey() {
         return citationKey;
     }
 
+    /**
+     * Set citation key.
+     *
+     * @param citationKey citation key
+     */
     void setCitationKey(String citationKey) {
         this.citationKey = citationKey;
     }
 
+    /**
+     * Get list iterator over Field list.
+     *
+     * @return Fields iterator
+     */
+    ListIterator<Field> fieldsIterator() {
+        return fields.listIterator();
+    }
+
+    /**
+     * Get list of fields.
+     *
+     * @return list of fields
+     */
     List<Field> getFields() {
         return fields;
     }
 
+    /**
+     * Get specific field.
+     *
+     * @param key field's key value
+     * @return Field object or null when field is not found
+     */
     Field getField(String key) {
         for (Field field : fields) {
             if (field.getKey().equals(key)) {
@@ -49,8 +99,33 @@ public class Entry {
         return null;
     }
 
+    /**
+     * Add Field.
+     *
+     * @param field Field object to add
+     */
     void addField(Field field) {
         fields.add(field);
+    }
+
+    /**
+     * Add author.
+     * <p>
+     * Needed for filtering entries by author's name..
+     *
+     * @param author author's name
+     */
+    void addAuthor(String author) {
+        authors.add(author);
+    }
+
+    /**
+     * Get authors' names.
+     *
+     * @return Set of authors' names
+     */
+    Set<String> getAuthors() {
+        return authors;
     }
 
     /**
@@ -143,19 +218,11 @@ public class Entry {
         }
     }
 
-    String toSimpleString() {
-        StringBuilder str = new StringBuilder(citationKey + "(" + entryType + "): ");
-        for (Field field : fields) {
-            // Multiline string printing
-            String fieldStr = field.toString();
-            fieldStr = fieldStr.replaceAll("\\r\\n|\\r|\\n", "\n\t\t> ");
-
-            str.append("\n\t").append(fieldStr);
-        }
-
-        return str.toString();
-    }
-
+    /**
+     * Convert entry into ASCII table.
+     *
+     * @return ASCII string
+     */
     @Override
     public String toString() {
         return PrettyFormat.table(this);

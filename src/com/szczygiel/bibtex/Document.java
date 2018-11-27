@@ -1,7 +1,11 @@
 package com.szczygiel.bibtex;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Stores whole BiBteX document.
@@ -9,7 +13,7 @@ import java.util.List;
  * Provides various functionalities such as searching, etc.
  */
 public class Document {
-    private String fileContent;
+    private String fileContents;
     private List<Entry> entries;
 
     Document() {
@@ -19,14 +23,14 @@ public class Document {
     /**
      * Loads BiBteX document from file.
      *
-     * @param filePath path to BiBteX file
+     * @param file BiBteX file
      * @return success
      */
-    boolean load(String filePath) {
-        fileContent = File.read(filePath);
-
-        if (fileContent.equals("")) {
-            System.out.println("unable to read from file: " + filePath);
+    boolean load(File file) {
+        try {
+            fileContents = new String(Files.readAllBytes(file.toPath()));
+        } catch (IOException e) {
+            System.out.println("unable to open file: " + file.getAbsolutePath());
             return false;
         }
 
@@ -37,12 +41,12 @@ public class Document {
      * Parses BiBteX document.
      */
     void parse() {
-        if (fileContent.equals("")) {
+        if (fileContents.equals("")) {
             return;
         }
 
         Parser parser = new Parser();
-        entries = parser.parse(fileContent);
+        entries = parser.parse(fileContents);
 
         Strings strings = new Strings();
         strings.extractFrom(entries);
@@ -54,21 +58,22 @@ public class Document {
 
         // Cleanup UNKNOWN fields
         for (Entry entry : entries) {
-            List<Field> fields = entry.getFields();
-
-            // Iterating like this allows easy deletion of elements
-            for (int i = fields.size() - 1; i >= 0; i--) {
-                if (fields.get(i).getType() == Field.Type.UNKNOWN) {
-                    fields.remove(i);
+            ListIterator<Field> fieldsIterator = entry.fieldsIterator();
+            while (fieldsIterator.hasNext()) {
+                if (fieldsIterator.next().getType() == Field.Type.UNKNOWN) {
+                    fieldsIterator.remove();
                 }
             }
         }
 
         validate();
+        splitAuthors();
     }
 
     /**
-     * Checks if all entries all valid according to SpecificEntries
+     * Checks if all entries all valid according to SpecificEntries.
+     * <p>
+     * Removes ignored fields, throws exception on missing required fields.
      */
     private void validate() {
         List<Entry> correctEntries = new ArrayList<>();
@@ -97,24 +102,24 @@ public class Document {
 
                 boolean found = false;
 
-                boolean two_values = false;
-                String first_value = "", second_value = "";
+                boolean twoValues = false;
+                String firstValue = "", secondValue = "";
 
                 // If the required field can be one of two values
                 if (requiredField.contains("|")) {
-                    two_values = true;
+                    twoValues = true;
                     String[] parts = requiredField.split("\\|");
-                    first_value = parts[0];
-                    second_value = parts[1];
+                    firstValue = parts[0];
+                    secondValue = parts[1];
                 }
 
                 // If there are two possible values
-                if (two_values) {
+                if (twoValues) {
                     for (Field field : fields) {
                         key = field.getKey();
 
                         // Check if current field is either one of them
-                        if (key.equals(first_value) || key.equals(second_value)) {
+                        if (key.equals(firstValue) || key.equals(secondValue)) {
                             found = true;
                             break;
                         }
@@ -156,6 +161,33 @@ public class Document {
         entries = correctEntries;
     }
 
+    /**
+     * Adds authors to entry's authors set.
+     */
+    private void splitAuthors() {
+        for (Entry entry : entries) {
+            for (Field field : entry.getFields()) {
+                if (field.getType() == Field.Type.STRING &&
+                        (field.getKey().equals("author") || field.getKey().equals("editor"))) {
+                    String value = (String) field.getValue();
+                    String[] authors = value.split("\\|");
+                    for (String author : authors) {
+                        entry.addAuthor(author.trim());
+                    }
+                }
+            }
+        }
+    }
+
+    List<Entry> getEntries() {
+        return entries;
+    }
+
+    /**
+     * Convert Document into ASCII tables.
+     *
+     * @return ASCII string
+     */
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();

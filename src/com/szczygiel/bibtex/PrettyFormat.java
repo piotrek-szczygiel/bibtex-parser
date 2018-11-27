@@ -2,6 +2,9 @@ package com.szczygiel.bibtex;
 
 import static java.lang.Math.max;
 
+/**
+ * ASCII art table formatter for BiBteX entries.
+ */
 class PrettyFormat {
 
     /**

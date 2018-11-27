@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="bibtex:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/bibtex_jar</output-path>
+    <root id="archive" name="bibtex.jar">
+      <element id="module-output" name="bibtex" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/info/picocli/picocli/3.8.0/picocli-3.8.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
