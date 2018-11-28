@@ -58,8 +58,7 @@ public class Document {
             return;
         }
 
-        Parser parser = new Parser();
-        entries = parser.parse(fileContents);
+        entries = Parser.parse(fileContents);
 
         Strings strings = new Strings();
         strings.extractFrom(entries);
@@ -180,22 +179,7 @@ public class Document {
      */
     private void fillAuthors() {
         for (Entry entry : entries) {
-            for (Field field : entry.getFields()) {
-                if (field.getType() == Field.Type.STRING &&
-                        (field.getKey().equals("author") || field.getKey().equals("editor"))) {
-                    String value = (String) field.getValue();
-                    String[] authors = value.split("\\|");
-                    for (String author : authors) {
-                        author = author.trim();
-
-                        int lastSpace = author.lastIndexOf(" ");
-                        String firstName = author.substring(0, lastSpace);
-                        String lastName = author.substring(lastSpace + 1);
-
-                        entry.addAuthor(firstName, lastName);
-                    }
-                }
-            }
+            entry.fillAuthors();
         }
     }
 

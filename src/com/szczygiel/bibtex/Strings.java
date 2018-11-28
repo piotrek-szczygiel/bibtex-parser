@@ -55,6 +55,16 @@ class Strings {
     }
 
     /**
+     * Add given {@link String} pair to {@link #strings}.
+     *
+     * @param key   key(name) of the string
+     * @param value value of the string
+     */
+    void setString(String key, String value) {
+        strings.put(key, value);
+    }
+
+    /**
      * Converts strings database to readable list for debugging purposes.
      *
      * @return multiline readable string

@@ -11,7 +11,7 @@ class Parser {
     /**
      * Stores ending index of last {@link #cutEntry} result.
      */
-    private int lastEndingIndex = 0;
+    static private int lastEndingIndex;
 
     /**
      * Parses BiBteX input into list of {@link Entry entries}.
@@ -19,23 +19,20 @@ class Parser {
      * @param input BiBteX input
      * @return list of {@link Entry entries}
      */
-    List<Entry> parse(String input) {
+    static List<Entry> parse(String input) {
         List<Entry> entries = new ArrayList<>();
 
         Matcher entryBeginningMatcher = Patterns.entryBeginning.matcher(input);
+        lastEndingIndex = 0;
         while (entryBeginningMatcher.find()) {
             String entryStr = cutEntry(entryBeginningMatcher, input);
             if (entryStr == null) {
                 continue;
             }
 
-            Matcher entryMatcher = Patterns.entry.matcher(entryStr);
-
-            if (entryMatcher.find()) {
-                Entry entry = parseEntry(entryMatcher);
-                if (entry != null) {
-                    entries.add(entry);
-                }
+            Entry entry = parseEntry(entryStr);
+            if (entry != null) {
+                entries.add(entry);
             }
         }
 
@@ -51,7 +48,7 @@ class Parser {
      * @param input                 BiBteX input
      * @return single BiBteX entry as {@link String}
      */
-    private String cutEntry(Matcher entryBeginningMatcher, String input) {
+    static private String cutEntry(Matcher entryBeginningMatcher, String input) {
         int matchStartIndex = entryBeginningMatcher.start();
         if (matchStartIndex < lastEndingIndex) {
             System.out.println("nested entries at byte: " + matchStartIndex);
@@ -83,15 +80,18 @@ class Parser {
      * <p>
      * Ignores @PREAMBLE and @COMMENT entries.
      *
-     * @param entryMatcher {@link Matcher} used for matching an entry
+     * @param entryStr entry to parse
      * @return parsed {@link Entry}
      */
-    private Entry parseEntry(Matcher entryMatcher) {
-        Entry entry = new Entry();
+    static Entry parseEntry(String entryStr) {
+        entryStr = entryStr.strip();
+        Matcher entryMatcher = Patterns.entry.matcher(entryStr);
 
-        if (entryMatcher.groupCount() < 2) {
+        if (!entryMatcher.find() || entryMatcher.groupCount() < 2) {
             return null;
         }
+
+        Entry entry = new Entry();
 
         String entryType = entryMatcher.group(1);
         entryType = entryType.toLowerCase();
@@ -152,7 +152,7 @@ class Parser {
      * @param input BiBteX field
      * @return parsed {@link Field}
      */
-    private Field parseField(String input) {
+    static private Field parseField(String input) {
         input = input.strip();
         if (input == null || input.equals("")) {
             return null;

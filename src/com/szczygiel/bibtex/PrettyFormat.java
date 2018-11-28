@@ -1,5 +1,8 @@
 package com.szczygiel.bibtex;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static java.lang.Math.max;
 
 /**
@@ -47,6 +50,13 @@ class PrettyFormat {
         valueWidth += 2;
 
 
+        String header = String.format("%s (%s)", entry.getEntryType().toUpperCase(),
+                entry.getCitationKey());
+
+        if (header.length() > keyWidth + valueWidth) {
+            valueWidth = header.length() - keyWidth + 1;
+        }
+
         // Header
         // ╔══════╤════════╗
         str.append("╔");
@@ -54,8 +64,7 @@ class PrettyFormat {
         str.append("╗\n");
 
         String formatHeader = String.format("║ %%-%ds║\n", keyWidth + valueWidth);
-        str.append(String.format(formatHeader, String.format("%s (%s)", entry.getEntryType().toUpperCase(),
-                entry.getCitationKey())));
+        str.append(String.format(formatHeader, header));
 
         // Header/Fields separator
         // ╠══════╤════════╣
@@ -78,11 +87,16 @@ class PrettyFormat {
             str.append(String.format(formatKey, fieldKey));
 
             if (fieldKey.equals("author") || fieldKey.equals("editor")) {
-                String[] authors = fieldValue.split("\\|");
-                for (int j = 0; j < authors.length; j++) {
-                    authors[j] = "• " + authors[j].trim();
+                List<String> authors = new ArrayList<>();
+
+                for (Entry.Author author : entry.getAuthors()) {
+                    if (fieldKey.equals("author") && author.authorType == Entry.AuthorType.AUTHOR) {
+                        authors.add("• " + author.lastName + ", " + author.firstName);
+                    } else if (fieldKey.equals("editor") && author.authorType == Entry.AuthorType.EDITOR) {
+                        authors.add("• " + author.lastName + ", " + author.firstName);
+                    }
                 }
-                str.append(formatMultilineTableValue(authors, formatValue, keyWidth));
+                str.append(formatMultilineTableValue(authors.toArray(new String[0]), formatValue, keyWidth));
             } else if (fieldValue.contains("\n") || fieldValue.contains("\r")) {
                 String[] lines = fieldValue.split("\\r\\n|\\r|\\n");
                 str.append(formatMultilineTableValue(lines, formatValue, keyWidth));
