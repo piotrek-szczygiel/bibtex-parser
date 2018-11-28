@@ -5,17 +5,20 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Simple map extension for storing strings values.
+ * Simple map extension for storing string values.
  * <p>
- * Provides extracting strings values from Entry list.
+ * Provides extracting string values from {@link Entry entries}.
  */
 class Strings {
+    /**
+     * Stores strings and their names(keys).
+     */
     private Map<String, String> strings = new HashMap<>();
 
     /**
-     * Extracts strings from list of provided entries.
+     * Extracts strings from list of provided {@link Entry entries}.
      *
-     * @param entries list of all entries
+     * @param entries list of {@link Entry entries}
      */
     void extractFrom(List<Entry> entries) {
         for (Entry entry : entries) {
@@ -42,10 +45,10 @@ class Strings {
     }
 
     /**
-     * Get string from Map data structure.
+     * Get {@link String} from {@link #strings}.
      *
-     * @param key key of the string
-     * @return string or null if string was not found
+     * @param key key(name) of the string
+     * @return {@link String} or null if string was not found
      */
     String getString(String key) {
         return strings.get(key);

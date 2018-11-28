@@ -5,16 +5,19 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 /**
- * Parses BiBteX input
+ * Parses BiBteX input.
  */
 class Parser {
+    /**
+     * Stores ending index of last {@link #cutEntry} result.
+     */
     private int lastEndingIndex = 0;
 
     /**
-     * Parses BiBteX input into list of Entry objects
+     * Parses BiBteX input into list of {@link Entry entries}.
      *
      * @param input BiBteX input
-     * @return list of Entry objects
+     * @return list of {@link Entry entries}
      */
     List<Entry> parse(String input) {
         List<Entry> entries = new ArrayList<>();
@@ -40,13 +43,13 @@ class Parser {
     }
 
     /**
-     * Cuts entry until last bracket.
+     * Cuts an entry until last bracket.
      * <p>
      * Allows for nested brackets.
      *
-     * @param entryBeginningMatcher matcher used for finding beginning of an entry
+     * @param entryBeginningMatcher {@link Matcher} used for finding beginning of an entry
      * @param input                 BiBteX input
-     * @return single BiBteX entry
+     * @return single BiBteX entry as {@link String}
      */
     private String cutEntry(Matcher entryBeginningMatcher, String input) {
         int matchStartIndex = entryBeginningMatcher.start();
@@ -76,12 +79,12 @@ class Parser {
     }
 
     /**
-     * Parses BiBteX entry into Entry object
+     * Parses BiBteX entry into an {@link Entry} object.
      * <p>
      * Ignores @PREAMBLE and @COMMENT entries.
      *
-     * @param entryMatcher matcher used for matching entry
-     * @return parsed Entry object
+     * @param entryMatcher {@link Matcher} used for matching an entry
+     * @return parsed {@link Entry}
      */
     private Entry parseEntry(Matcher entryMatcher) {
         Entry entry = new Entry();
@@ -144,10 +147,10 @@ class Parser {
     }
 
     /**
-     * Parses BiBteX field into a Field object.
+     * Parses BiBteX field into a {@link Field} object.
      *
      * @param input BiBteX field
-     * @return parsed Field object
+     * @return parsed {@link Field}
      */
     private Field parseField(String input) {
         input = input.strip();

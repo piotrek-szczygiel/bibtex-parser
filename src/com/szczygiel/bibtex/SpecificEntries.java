@@ -6,14 +6,18 @@ import java.util.Map;
 
 /**
  * Holds list of entries with their required and optional fields.
+ *
+ * @see
+ * <a href="https://pl.wikipedia.org/wiki/BibTeX#Struktura_plik.C3.B3w_bazy_bibliograficznej">Wikipedia article</a>
  */
 class SpecificEntries {
+    /**
+     * Stores map of entry types and its required and optional fields.
+     */
     static private Map<String, SpecificEntry> specificEntries = new HashMap<>();
 
     /**
-     * Populates specificEntries.
-     * <p>
-     * According to: https://pl.wikipedia.org/wiki/BibTeX#Struktura_plik.C3.B3w_bazy_bibliograficznej
+     * Populates {@link #specificEntries}.
      */
     static void populate() {
         specificEntries.put("article",
@@ -75,10 +79,10 @@ class SpecificEntries {
     }
 
     /**
-     * Gets specific entry by its type
+     * Get {@link SpecificEntry} by its type.
      *
-     * @param entryType type of an entry
-     * @return specified entry
+     * @param entryType entry type
+     * @return {@link SpecificEntry} or null when it is not found
      */
     static SpecificEntry get(String entryType) {
         return specificEntries.get(entryType);
@@ -88,9 +92,24 @@ class SpecificEntries {
      * Helper class for populating specific entries.
      */
     static class SpecificEntry {
+        /**
+         * Fields required by specific entry type.
+         */
         List<String> requiredFields;
+
+        /**
+         * Optional fields in specific entry type.
+         * <p>
+         * Fields that are neither required nor optional are omitted.
+         */
         List<String> optionalFields;
 
+        /**
+         * Constructor for {@link SpecificEntry}
+         *
+         * @param requiredFields {@link #requiredFields}
+         * @param optionalFields {@link #optionalFields}
+         */
         SpecificEntry(List<String> requiredFields, List<String> optionalFields) {
             this.requiredFields = requiredFields;
             this.optionalFields = optionalFields;

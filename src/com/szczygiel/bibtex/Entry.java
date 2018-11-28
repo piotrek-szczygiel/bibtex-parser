@@ -4,17 +4,35 @@ import java.util.*;
 import java.util.regex.Matcher;
 
 /**
- * Stores information about entry, provides strings and concatenation computing.
+ * Stores information about an entry, provides strings and concatenation computing.
  */
 public class Entry {
-    private String entryType;
-    private String citationKey;
+    /**
+     * Set of authors' names used later in filtering.
+     */
     private Set<String> authors;
 
+    /**
+     * Citation key of an entry.
+     * <p>
+     * Citation key can be defined inside BiBteX file like this: @TYPE{citation_key
+     */
+    private String citationKey;
+
+    /**
+     * Type of an entry.
+     * <p>
+     * Type can be for example 'book' or 'article'.
+     */
+    private String entryType;
+
+    /**
+     * List of {@link Field} objects inside current entry.
+     */
     private List<Field> fields;
 
     /**
-     * Constructor for Entry.
+     * Constructor for {@link Entry}.
      * <p>
      * Initializes members with default values.
      */
@@ -26,9 +44,7 @@ public class Entry {
     }
 
     /**
-     * Return entry type.
-     * <p>
-     * Entry type can be for example: "book"
+     * Get {@link #entryType}.
      *
      * @return entry type
      */
@@ -37,7 +53,7 @@ public class Entry {
     }
 
     /**
-     * Set entry type.
+     * Set {@link #entryType}.
      *
      * @param entryType entry type
      */
@@ -46,9 +62,7 @@ public class Entry {
     }
 
     /**
-     * Return citation key.
-     * <p>
-     * Citation key is defined like this: @TYPE{citation_key
+     * Get {@link #citationKey}.
      *
      * @return citation key
      */
@@ -57,7 +71,7 @@ public class Entry {
     }
 
     /**
-     * Set citation key.
+     * Set {@link #citationKey}.
      *
      * @param citationKey citation key
      */
@@ -84,10 +98,10 @@ public class Entry {
     }
 
     /**
-     * Get specific field.
+     * Get specified {@link Field}.
      *
-     * @param key field's key value
-     * @return Field object or null when field is not found
+     * @param key {@link #citationKey}
+     * @return {@link Field} object or null when {@link Field} is not found
      */
     Field getField(String key) {
         for (Field field : fields) {
@@ -100,38 +114,36 @@ public class Entry {
     }
 
     /**
-     * Add Field.
+     * Add {@link Field}.
      *
-     * @param field Field object to add
+     * @param field {@link Field}
      */
     void addField(Field field) {
         fields.add(field);
     }
 
     /**
-     * Add author.
-     * <p>
-     * Needed for filtering entries by author's name..
+     * Add author to {@link #authors}.
      *
-     * @param author author's name
+     * @param author author
      */
     void addAuthor(String author) {
         authors.add(author);
     }
 
     /**
-     * Get authors' names.
+     * Get {@link #authors}.
      *
-     * @return Set of authors' names
+     * @return authors
      */
     Set<String> getAuthors() {
         return authors;
     }
 
     /**
-     * Converts reference fields into string which they reference
+     * Convert reference fields into string which they reference.
      *
-     * @param strings Strings object containing strings which fields can reference to
+     * @param strings {@link Strings} containing strings which {@link Field fields} can reference to
      */
     void computeStrings(Strings strings) {
         for (Field field : fields) {
@@ -151,11 +163,11 @@ public class Entry {
     }
 
     /**
-     * Converts concatenation fields into concatenated strings
+     * Convert concatenation {@link Field fields} into concatenated strings.
      * <p>
      * Allows for concatenating multiple strings and references.
      *
-     * @param strings Strings object containing strings which fields can reference to
+     * @param strings {@link Strings}
      */
     void computeConcatenation(Strings strings) {
         for (Field field : fields) {
@@ -219,9 +231,9 @@ public class Entry {
     }
 
     /**
-     * Convert entry into ASCII table.
+     * Convert entry into an ASCII table.
      *
-     * @return ASCII string
+     * @return ASCII table
      */
     @Override
     public String toString() {

@@ -13,18 +13,18 @@ import java.util.Set;
  * Main program class.
  * <p>
  * You run this program with following arguments:
- * <p>
- * -f, --file=FILE                    path to BiBteX file
- * -a, --author=AUTHOR[,AUTHOR...]    author(s) to search for
- * -t, --type=TYPE[,TYPE...]          entry type(s) to search for
- * <p>
- * -h, --help                         show help message and exit
- * -v, --version                      print version information and exit
+ * <ul>
+ *  <li>-f, --file=FILE<br>path to BiBteX file</li>
+ *  <li>-a, --author=AUTHOR[,AUTHOR...]<br>author(s) to search for</li>
+ *  <li>-t, --type=TYPE[,TYPE...]<br>entry type(s) to search for</li>
+ *  <li>-h, --help<br>show help message and exit</li>
+ *  <li>-v, --version<br>print version information and exit</li>
+ * </ul>
  */
 @Command(name = "bibtex",
         mixinStandardHelpOptions = true,
         sortOptions = false,
-        version = "BiBteX parser v0.1 by Piotr Szczygieł",
+        version = "BiBteX parser v0.1 by Piotr Szczygieł 2018",
         headerHeading = "@|bold,underline Usage:|@%n%n",
         synopsisHeading = "%n",
         descriptionHeading = "%n@|bold,underline Description:|@%n%n",
@@ -40,19 +40,28 @@ public class Main implements Runnable {
     Picocli automatically assigns given arguments to those members.
      */
 
+    /**
+     * {@link File} to parse.
+     */
     @Option(names = {"-f", "--file"}, required = true, paramLabel = "FILE", description = "path to BiBteX file")
     private File file;
 
+    /**
+     * Authors' names used for filtering.
+     */
     @Option(names = {"-a", "--author"}, split = ",", paramLabel = "AUTHOR", description = "author(s) to search for")
     private Set<String> authors = new HashSet<>();
 
+    /**
+     * Entry types used for filtering.
+     */
     @Option(names = {"-t", "--type"}, split = ",", paramLabel = "TYPE", description = "entry type(s) to search for")
     private Set<String> entryTypes = new HashSet<>();
 
     /**
-     * Entry point for program.
+     * Entry point of the program.
      *
-     * @param args arguments passed from command line
+     * @param args arguments passed from a command line
      */
     public static void main(String[] args) {
         CommandLine.run(new Main(), args);
@@ -61,9 +70,12 @@ public class Main implements Runnable {
     /**
      * Main program logic.
      * <p>
-     * Display filtered entries.
+     * Display {@link Filter filtered} {@link Entry entries}.
      */
     public void run() {
+        // Populate specific entries for Document parsing
+        SpecificEntries.populate();
+
         Document document = new Document();
         if (document.load(file)) {
             document.parse();

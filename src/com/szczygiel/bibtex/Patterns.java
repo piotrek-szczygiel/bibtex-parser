@@ -30,7 +30,7 @@ class Patterns {
     );
 
     /**
-     * Matches assignment of string to a key.
+     * Matches assignment of a string to a key.
      */
     static Pattern string = Pattern.compile("(?s)"
             + "^([a-zA-Z_][\\w-]*)\\s*" // string name
@@ -39,7 +39,7 @@ class Patterns {
     );
 
     /**
-     * Matches assignment of number to a key.
+     * Matches assignment of a number to a key.
      */
     static Pattern number = Pattern.compile(""
             + "^([a-zA-Z_][\\w-]*)\\s*" // number name
@@ -48,7 +48,7 @@ class Patterns {
     );
 
     /**
-     * Matches assignment of reference to a key.
+     * Matches assignment of a reference to a key.
      */
     static Pattern reference = Pattern.compile(""
             + "^([a-zA-Z_][\\w-]*)\\s*" // reference name

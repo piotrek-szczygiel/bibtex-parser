@@ -8,22 +8,35 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * Stores whole BiBteX document.
+ * Stores whole BiBteX document as list of {@link Entry entries}.
  * <p>
- * Provides various functionalities such as searching, etc.
+ * Provides {@link Filter filtering} and {@link PrettyFormat printing ASCII tables}.
  */
 public class Document {
-    private String fileContents;
+    /**
+     * List of {@link Entry entries} contained in a document.
+     */
     private List<Entry> entries;
 
-    Document() {
-        SpecificEntries.populate();
+    /**
+     * Contents of a BiBteX file as a {@link String}.
+     */
+    private String fileContents;
+
+
+    /**
+     * Get {@link #entries}.
+     *
+     * @return entries
+     */
+    List<Entry> getEntries() {
+        return entries;
     }
 
     /**
-     * Loads BiBteX document from file.
+     * Load BiBteX document from {@link File}.
      *
-     * @param file BiBteX file
+     * @param file BiBteX {@link File}.
      * @return success
      */
     boolean load(File file) {
@@ -38,7 +51,7 @@ public class Document {
     }
 
     /**
-     * Parses BiBteX document.
+     * Parse BiBteX document.
      */
     void parse() {
         if (fileContents.equals("")) {
@@ -67,13 +80,14 @@ public class Document {
         }
 
         validate();
-        splitAuthors();
+        fillAuthors();
     }
 
     /**
-     * Checks if all entries all valid according to SpecificEntries.
+     * Check if all {@link #entries} are valid according to {@link SpecificEntries}.
      * <p>
-     * Removes ignored fields, throws exception on missing required fields.
+     * Remove ignored fields.
+     * Throw exception on missing required fields.
      */
     private void validate() {
         List<Entry> correctEntries = new ArrayList<>();
@@ -162,9 +176,9 @@ public class Document {
     }
 
     /**
-     * Adds authors to entry's authors set.
+     * Fill {@link #entries} with its authors.
      */
-    private void splitAuthors() {
+    private void fillAuthors() {
         for (Entry entry : entries) {
             for (Field field : entry.getFields()) {
                 if (field.getType() == Field.Type.STRING &&
@@ -179,14 +193,10 @@ public class Document {
         }
     }
 
-    List<Entry> getEntries() {
-        return entries;
-    }
-
     /**
-     * Convert Document into ASCII tables.
+     * Convert this document into ASCII tables.
      *
-     * @return ASCII string
+     * @return ASCII tables
      */
     @Override
     public String toString() {

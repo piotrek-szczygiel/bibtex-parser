@@ -8,7 +8,7 @@ import static java.lang.Math.max;
 class PrettyFormat {
 
     /**
-     * Convert entry into ASCII table
+     * Convert entry into an ASCII table.
      *
      * @param entry entry to format
      * @return ASCII table
@@ -114,7 +114,7 @@ class PrettyFormat {
     }
 
     /**
-     * Repeat given string n times
+     * Repeat given string n times.
      *
      * @param string string to repeat
      * @param n      how many times
@@ -125,7 +125,7 @@ class PrettyFormat {
     }
 
     /**
-     * Format multiline value, so it looks pretty when in table
+     * Format multiline value, so it looks pretty when in table.
      *
      * @param lines   array of lines to format
      * @param format  format string

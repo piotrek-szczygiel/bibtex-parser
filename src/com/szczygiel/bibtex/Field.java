@@ -5,35 +5,32 @@ package com.szczygiel.bibtex;
  */
 class Field {
     /**
-     * Get raw value of field.
+     * Key is like a variable name in a field.
      * <p>
-     * Raw value is field value before parsing.
-     *
-     * @return raw value
+     * E.g. key = "value"
      */
-    String getRaw() {
-        return raw;
-    }
-
     private String key;
-
-    private String raw;
-    private Object value;
-    private Type type = Type.UNKNOWN;
-
     /**
-     * Set raw value of field.
-     *
-     * @param raw raw value
-     */
-    void setRaw(String raw) {
-        this.raw = raw;
-    }
-
-    /**
-     * Get field's key.
+     * Raw value of a field.
      * <p>
-     * Key is like variable name e.g. key = "value"
+     * It is field's value before parsing.
+     */
+    private String raw;
+    /**
+     * {@link Type Field's type}.
+     */
+    private Type type = Type.UNKNOWN;
+    /**
+     * Field's value.
+     * <p>
+     * It can have following types:
+     * - {@link String}
+     * - {@link Integer}
+     */
+    private Object value;
+
+    /**
+     * Get {@link #key}.
      *
      * @return key
      */
@@ -42,59 +39,96 @@ class Field {
     }
 
     /**
-     * Set field's key.
+     * Set {@link #key}.
      *
-     * @param key key name to set
+     * @param key key
      */
     void setKey(String key) {
         this.key = key;
     }
 
     /**
-     * Get field's value.
-     * <p>
-     * Field can have following types:
-     * - String
-     * - Integer
+     * Get {@link #raw raw value}.
      *
-     * @return field's value
+     * @return raw value
      */
-    Object getValue() {
-        return value;
+    String getRaw() {
+        return raw;
     }
 
     /**
-     * Set field's value.
+     * Set {@link #raw raw value}.
      *
-     * @param value value to set
+     * @param raw raw value
      */
-    void setValue(Object value) {
-        this.value = value;
+    void setRaw(String raw) {
+        this.raw = raw;
     }
 
     /**
-     * Get type of field's vaule.
-     * <p>
-     * Field's value can have following types:
-     * - STRING
-     * - NUMBER
-     * - REFERENCE
-     * - CONCATENATION
-     * - UNKNOWN
+     * Get {@link #type}.
      *
-     * @return field's value type
+     * @return type
      */
     Type getType() {
         return type;
     }
 
     /**
-     * Set type of field's value.
+     * Set {@link #type}.
      *
-     * @param type field's value type
+     * @param type type
      */
     void setType(Type type) {
         this.type = type;
+    }
+
+    /**
+     * Get {@link #value}.
+     *
+     * @return value
+     */
+    Object getValue() {
+        return value;
+    }
+
+    /**
+     * Set {@link #value}.
+     *
+     * @param value value
+     */
+    void setValue(Object value) {
+        this.value = value;
+    }
+
+    /**
+     * Available types of fields.
+     */
+    enum Type {
+        /**
+         * Simple string value.
+         */
+        STRING,
+
+        /**
+         * Integer value.
+         */
+        NUMBER,
+
+        /**
+         * Reference to string stored in {@link Strings}.
+         */
+        REFERENCE,
+
+        /**
+         * Concatenation of combination of strings and references.
+         */
+        CONCATENATION,
+
+        /**
+         * Unknown, invalid field type.
+         */
+        UNKNOWN
     }
 
     /**
@@ -124,12 +158,5 @@ class Field {
         }
 
         return str;
-    }
-
-    /**
-     * Available types of fields.
-     */
-    enum Type {
-        STRING, NUMBER, REFERENCE, CONCATENATION, UNKNOWN
     }
 }
