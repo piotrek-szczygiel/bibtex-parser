@@ -186,7 +186,13 @@ public class Document {
                     String value = (String) field.getValue();
                     String[] authors = value.split("\\|");
                     for (String author : authors) {
-                        entry.addAuthor(author.trim());
+                        author = author.trim();
+
+                        int lastSpace = author.lastIndexOf(" ");
+                        String firstName = author.substring(0, lastSpace);
+                        String lastName = author.substring(lastSpace + 1);
+
+                        entry.addAuthor(firstName, lastName);
                     }
                 }
             }

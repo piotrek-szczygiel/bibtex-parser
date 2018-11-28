@@ -10,7 +10,20 @@ public class Entry {
     /**
      * Set of authors' names used later in filtering.
      */
-    private Set<String> authors;
+    private Set<Author> authors;
+
+    /**
+     * Add author to {@link #authors}.
+     *
+     * @param firstName first name
+     * @param lastName  last name
+     */
+    void addAuthor(String firstName, String lastName) {
+        Author author = new Author();
+        author.firstName = firstName;
+        author.lastName = lastName;
+        authors.add(author);
+    }
 
     /**
      * Citation key of an entry.
@@ -123,21 +136,31 @@ public class Entry {
     }
 
     /**
-     * Add author to {@link #authors}.
-     *
-     * @param author author
-     */
-    void addAuthor(String author) {
-        authors.add(author);
-    }
-
-    /**
      * Get {@link #authors}.
      *
      * @return authors
      */
-    Set<String> getAuthors() {
+    Set<Author> getAuthors() {
         return authors;
+    }
+
+    /**
+     * Get {@link #authors authors'} last names.
+     *
+     * @return authors last names
+     */
+    Set<String> getAuthorsLastNames() {
+        Set<String> lastNames = new HashSet<>();
+        for (Author author : authors) {
+            lastNames.add(author.lastName);
+        }
+
+        return lastNames;
+    }
+
+    public class Author {
+        String firstName;
+        String lastName;
     }
 
     /**

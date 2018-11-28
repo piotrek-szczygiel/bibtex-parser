@@ -21,7 +21,7 @@ import java.util.Set;
  *  <li>-v, --version<br>print version information and exit</li>
  * </ul>
  */
-@Command(name = "bibtex",
+@Command(name = "bibtex-parser",
         mixinStandardHelpOptions = true,
         sortOptions = false,
         version = "BiBteX parser v0.1 by Piotr Szczygieł 2018",
@@ -49,7 +49,8 @@ public class Main implements Runnable {
     /**
      * Authors' names used for filtering.
      */
-    @Option(names = {"-a", "--author"}, split = ",", paramLabel = "AUTHOR", description = "author(s) to search for")
+    @Option(names = {"-a", "--author"}, split = ",", paramLabel = "AUTHOR", description = "author(s) last name(s) to " +
+            "search for")
     private Set<String> authors = new HashSet<>();
 
     /**

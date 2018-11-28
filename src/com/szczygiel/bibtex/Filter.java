@@ -42,7 +42,7 @@ class Filter {
     static List<Entry> filterAuthors(List<Entry> entries, Set<String> authors) {
         List<Entry> filteredEntries = new ArrayList<>();
         for (Entry entry : entries) {
-            if (entry.getAuthors().containsAll(authors)) {
+            if (entry.getAuthorsLastNames().containsAll(authors)) {
                 filteredEntries.add(entry);
             }
         }
