@@ -4,17 +4,23 @@ import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
 
+/**
+ * Tests for the BiBteX parser.
+ */
 public class ParserTest {
 
+    /**
+     * Basic entry parsing test.
+     */
     @Test
     public void testEntryParsing1() {
         String entryStr =
-            "@TEST{citation_key," +
-                "key1 = 123," +
-                "key2 = \"123\"," +
-                "key3 = a # b," +
-                "author = \"author\"" +
-            "}";
+                "@TEST{citation_key," +
+                        "key1 = 123," +
+                        "key2 = \"123\"," +
+                        "key3 = a # b," +
+                        "author = \"author\"" +
+                        "}";
 
         System.out.println(entryStr);
 

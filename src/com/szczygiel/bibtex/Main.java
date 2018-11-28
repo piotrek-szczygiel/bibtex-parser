@@ -14,11 +14,11 @@ import java.util.Set;
  * <p>
  * You run this program with following arguments:
  * <ul>
- *  <li>-f, --file=FILE<br>path to BiBteX file</li>
- *  <li>-a, --author=AUTHOR[,AUTHOR...]<br>author(s) to search for</li>
- *  <li>-t, --type=TYPE[,TYPE...]<br>entry type(s) to search for</li>
- *  <li>-h, --help<br>show help message and exit</li>
- *  <li>-v, --version<br>print version information and exit</li>
+ * <li>-f, --file=FILE<br>path to BiBteX file</li>
+ * <li>-a, --author=AUTHOR[,AUTHOR...]<br>author(s) to search for</li>
+ * <li>-t, --type=TYPE[,TYPE...]<br>entry type(s) to search for</li>
+ * <li>-h, --help<br>show help message and exit</li>
+ * <li>-v, --version<br>print version information and exit</li>
  * </ul>
  */
 @Command(name = "bibtex-parser",

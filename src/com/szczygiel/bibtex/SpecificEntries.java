@@ -7,8 +7,7 @@ import java.util.Map;
 /**
  * Holds list of entries with their required and optional fields.
  *
- * @see
- * <a href="https://pl.wikipedia.org/wiki/BibTeX#Struktura_plik.C3.B3w_bazy_bibliograficznej">Wikipedia article</a>
+ * @see <a href="https://pl.wikipedia.org/wiki/BibTeX#Struktura_plik.C3.B3w_bazy_bibliograficznej">Wikipedia article</a>
  */
 class SpecificEntries {
     /**
