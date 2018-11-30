@@ -2,6 +2,10 @@ package com.szczygiel.bibtex;
 
 import org.testng.annotations.Test;
 
+import java.util.Set;
+
+import static org.testng.Assert.assertEquals;
+
 public class DocumentTest {
     /**
      * Basic whole file parsing test.
@@ -52,7 +56,7 @@ public class DocumentTest {
                         "}\n" +
                         "\n" +
                         "@BOOKLET{booklet-full,\n" +
-                        "   author = \"Jill C. Knvth\",\n" +
+                        "   author = \"Jill C. Knuth\",\n" +
                         "   title = \"The Programming of Computer Art\",\n" +
                         "   howpublished = \"Vernier Art Center\",\n" +
                         "   address = \"Stanford California\",\n" +
@@ -68,7 +72,7 @@ public class DocumentTest {
                         "   booktitle = \"Proc. Fifteenth Annual ACM STOC\",\n" +
                         "   number = 17,\n" +
                         "   series = \"All ACM Conferences\",\n" +
-                        "   pages = ref # \"133 139\",\n" +
+                        "   pages = ref # \" 133 139\",\n" +
                         "   month = mar,\n" +
                         "   year = 1983,\n" +
                         "   address = \"Boston\",\n" +
@@ -80,6 +84,52 @@ public class DocumentTest {
         Document document = new Document();
         document.loadString(fileStr);
         document.parse();
-        System.out.println(document);
+
+        String correctBookFull = "book-full(book): \n" +
+                "\tauthor(string): Knuth| Donald E. \n" +
+                "\ttitle(string): Seminumerical Algorithms\n" +
+                "\tpublisher(string): Addison-Wesley\n" +
+                "\tyear(number): 1981\n" +
+                "\tvolume(number): 2\n" +
+                "\tseries(string): The Art of Computer Programming\n" +
+                "\taddress(string): Reading Massachusetts\n" +
+                "\tedition(string): Second\n" +
+                "\tmonth(string): 10 styczeń\n" +
+                "\tnote(string): This is a full BOOK entry";
+
+        String correctBookletFull = "booklet-full(booklet): \n" +
+                "\ttitle(string): The Programming of Computer Art\n" +
+                "\tauthor(string): Jill C. Knuth\n" +
+                "\thowpublished(string): Vernier Art Center\n" +
+                "\taddress(string): Stanford California\n" +
+                "\tmonth(string): luty\n" +
+                "\tyear(number): 1988\n" +
+                "\tnote(string): This is a full BOOKLET entry";
+
+        String correctInproceedingsFull = "inproceedings-full(inproceedings): \n" +
+                "\tauthor(string): Alfred V. Oaho and Jeffrey D. Ullman and Yannakakis| Mihalis \n" +
+                "\ttitle(string): On Notions of Information Transfer in {VLSI} Circuits\n" +
+                "\tbooktitle(string): Proc. Fifteenth Annual ACM STOC\n" +
+                "\tyear(number): 1983\n" +
+                "\teditor(string): Wizard V. Oz and Mihalis Yannakakis\n" +
+                "\tseries(string): All ACM Conferences\n" +
+                "\tpages(string): 123 133 139\n" +
+                "\taddress(string): Boston\n" +
+                "\tmonth(string): marzec\n" +
+                "\torganization(string): ACM\n" +
+                "\tpublisher(string): Academic Press\n" +
+                "\tnote(string): This is a full INPROCEDINGS entry";
+
+        Entry bookFull = document.getEntries().get(0);
+        Entry bookletFull = document.getEntries().get(1);
+        Entry inproceedingsFull = document.getEntries().get(2);
+
+        assertEquals(bookFull.toString(), correctBookFull);
+        assertEquals(bookletFull.toString(), correctBookletFull);
+        assertEquals(inproceedingsFull.toString(), correctInproceedingsFull);
+
+        assertEquals(bookFull.getAuthorsLastNames(), Set.of("Knuth"));
+        assertEquals(bookletFull.getAuthorsLastNames(), Set.of("Knuth"));
+        assertEquals(inproceedingsFull.getAuthorsLastNames(), Set.of("Oaho", "Ullman", "Yannakakis", "Oz"));
     }
 }
