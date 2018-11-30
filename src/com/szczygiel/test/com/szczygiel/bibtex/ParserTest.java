@@ -13,7 +13,7 @@ public class ParserTest {
      * Basic entry parsing test.
      */
     @Test
-    public void testEntryParsing1() {
+    public void testEntryParse() {
         String entryStr =
                 "@TEST{citation_key," +
                         "key1 = 123," +

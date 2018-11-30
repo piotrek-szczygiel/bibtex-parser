@@ -74,11 +74,8 @@ public class Main implements Runnable {
      * Display {@link Filter filtered} {@link Entry entries}.
      */
     public void run() {
-        // Populate specific entries for Document parsing
-        SpecificEntries.populate();
-
         Document document = new Document();
-        if (document.load(file)) {
+        if (document.loadFile(file)) {
             document.parse();
 
             List<Entry> filteredEntries = document.getEntries();
@@ -90,7 +87,7 @@ public class Main implements Runnable {
             }
 
             for (Entry entry : filteredEntries) {
-                System.out.println(entry);
+                System.out.println("\n\n" + PrettyFormat.table(entry));
             }
         }
     }

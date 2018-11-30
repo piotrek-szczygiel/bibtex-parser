@@ -39,7 +39,7 @@ public class Document {
      * @param file BiBteX {@link File}.
      * @return success
      */
-    boolean load(File file) {
+    boolean loadFile(File file) {
         try {
             fileContents = new String(Files.readAllBytes(file.toPath()));
         } catch (IOException e) {
@@ -48,6 +48,15 @@ public class Document {
         }
 
         return true;
+    }
+
+    /**
+     * Set {@link #fileContents}.
+     *
+     * @param fileContents file contents
+     */
+    void loadString(String fileContents) {
+        this.fileContents = fileContents;
     }
 
     /**
@@ -92,8 +101,8 @@ public class Document {
         List<Entry> correctEntries = new ArrayList<>();
 
         for (Entry entry : entries) {
-            // Don't add entries of unspecified type
-            SpecificEntries.SpecificEntry specificEntry = SpecificEntries.get(entry.getEntryType());
+            SpecificEntries specificEntries = SpecificEntries.getInstance();
+            SpecificEntries.SpecificEntry specificEntry = specificEntries.get(entry.getEntryType());
             if (specificEntry == null) {
                 continue;
             }
@@ -192,10 +201,6 @@ public class Document {
     public String toString() {
         StringBuilder str = new StringBuilder();
         for (Entry entry : entries) {
-            if (entry.getEntryType().equals("string")) {
-                continue;
-            }
-
             str.append(entry);
             str.append("\n\n");
         }

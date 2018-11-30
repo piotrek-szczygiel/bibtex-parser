@@ -6,6 +6,8 @@ import java.util.Map;
 
 /**
  * Holds list of entries with their required and optional fields.
+ * <p>
+ * Uses singleton design pattern.
  *
  * @see <a href="https://pl.wikipedia.org/wiki/BibTeX#Struktura_plik.C3.B3w_bazy_bibliograficznej">Wikipedia article</a>
  */
@@ -13,12 +15,12 @@ class SpecificEntries {
     /**
      * Stores map of entry types and its required and optional fields.
      */
-    static private Map<String, SpecificEntry> specificEntries = new HashMap<>();
+    private Map<String, SpecificEntry> specificEntries = new HashMap<>();
 
     /**
      * Populates {@link #specificEntries}.
      */
-    static void populate() {
+    private SpecificEntries() {
         specificEntries.put("article",
                 new SpecificEntry(
                         List.of("author", "title", "journal", "year"),
@@ -78,12 +80,21 @@ class SpecificEntries {
     }
 
     /**
+     * Return instance of this singleton class.
+     *
+     * @return instanc eof {@link SpecificEntries}
+     */
+    static SpecificEntries getInstance() {
+        return SpecificEntriesHolder.INSTANCE;
+    }
+
+    /**
      * Get {@link SpecificEntry} by its type.
      *
      * @param entryType entry type
      * @return {@link SpecificEntry} or null when it is not found
      */
-    static SpecificEntry get(String entryType) {
+    SpecificEntry get(String entryType) {
         return specificEntries.get(entryType);
     }
 
@@ -113,5 +124,15 @@ class SpecificEntries {
             this.requiredFields = requiredFields;
             this.optionalFields = optionalFields;
         }
+    }
+
+    /**
+     * Holds instance of this singleton class.
+     */
+    private static class SpecificEntriesHolder {
+        /**
+         * Instance of this singleton class.
+         */
+        private static final SpecificEntries INSTANCE = new SpecificEntries();
     }
 }

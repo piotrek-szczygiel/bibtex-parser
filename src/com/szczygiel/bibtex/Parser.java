@@ -22,7 +22,7 @@ class Parser {
     static List<Entry> parse(String input) {
         List<Entry> entries = new ArrayList<>();
 
-        Matcher entryBeginningMatcher = Patterns.entryBeginning.matcher(input);
+        Matcher entryBeginningMatcher = Patterns.getInstance().matchEntryBeginning(input);
         lastEndingIndex = 0;
         while (entryBeginningMatcher.find()) {
             String entryStr = cutEntry(entryBeginningMatcher, input);
@@ -85,7 +85,7 @@ class Parser {
      */
     static Entry parseEntry(String entryStr) {
         entryStr = entryStr.strip();
-        Matcher entryMatcher = Patterns.entry.matcher(entryStr);
+        Matcher entryMatcher = Patterns.getInstance().matchEntry(entryStr);
 
         if (!entryMatcher.find() || entryMatcher.groupCount() < 2) {
             return null;
@@ -120,7 +120,7 @@ class Parser {
             System.out.println("entry without key value structure: " + entryMatcher.group(0));
             return null;
         }
-        Matcher fieldMatcher = Patterns.field.matcher(keyValueStructure);
+        Matcher fieldMatcher = Patterns.getInstance().matchField(keyValueStructure);
 
         // Find key value combination
         while (fieldMatcher.find()) {
@@ -165,10 +165,12 @@ class Parser {
         Object value;
         Field.Type type;
 
-        Matcher stringMatcher = Patterns.string.matcher(input);
-        Matcher numberMatcher = Patterns.number.matcher(input);
-        Matcher referenceMatcher = Patterns.reference.matcher(input);
-        Matcher concatenationMatcher = Patterns.concatenation.matcher(input);
+        Patterns patterns = Patterns.getInstance();
+
+        Matcher stringMatcher = patterns.matchString(input);
+        Matcher numberMatcher = patterns.matchNumber(input);
+        Matcher referenceMatcher = patterns.matchReference(input);
+        Matcher concatenationMatcher = patterns.matchConcatenation(input);
 
         // Match key value pair to string, number or reference
         Matcher actualMatcher;

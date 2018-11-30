@@ -270,7 +270,7 @@ public class Entry {
                 StringBuilder finalValue = new StringBuilder();
                 String concatenation = (String) field.getValue();
 
-                Matcher concatMatcher = Patterns.concatenationField.matcher(concatenation);
+                Matcher concatMatcher = Patterns.getInstance().matchConcatenationField(concatenation);
 
                 boolean error = false;
                 while (concatMatcher.find()) {
@@ -341,12 +341,21 @@ public class Entry {
     }
 
     /**
-     * Convert entry into an ASCII table.
+     * Convert entry into readable structure.
      *
-     * @return ASCII table
+     * @return readable entry
      */
     @Override
     public String toString() {
-        return PrettyFormat.table(this);
+        StringBuilder str = new StringBuilder(citationKey + "(" + entryType + "): ");
+        for (Field field : fields) {
+            // Multiline string printing
+            String fieldStr = field.toString();
+            fieldStr = fieldStr.replaceAll("\\r\\n|\\r|\\n", "\n\t\t> ");
+
+            str.append("\n\t").append(fieldStr);
+        }
+
+        return str.toString();
     }
 }
