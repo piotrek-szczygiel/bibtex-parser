@@ -73,22 +73,6 @@ class Patterns {
     );
 
     /**
-     * Prevents creating new instance of this class.
-     */
-    private Patterns() {
-
-    }
-
-    /**
-     * Return instance of this singleton class.
-     *
-     * @return instance of {@link Patterns}
-     */
-    static Patterns getInstance() {
-        return PatternsHolder.INSTANCE;
-    }
-
-    /**
      * Match {@link #entryBeginning}.
      *
      * @param input input
@@ -166,6 +150,22 @@ class Patterns {
      */
     Matcher matchConcatenationField(CharSequence input) {
         return concatenationField.matcher(input);
+    }
+
+    /**
+     * Prevents creating new instance of this class.
+     */
+    private Patterns() {
+
+    }
+
+    /**
+     * Return instance of this singleton class.
+     *
+     * @return instance of {@link Patterns}
+     */
+    static Patterns getInstance() {
+        return PatternsHolder.INSTANCE;
     }
 
     /**

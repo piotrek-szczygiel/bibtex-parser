@@ -1,5 +1,6 @@
 package com.szczygiel.bibtex;
 
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -8,12 +9,18 @@ import static org.testng.Assert.*;
  * Tests for the BiBteX parser.
  */
 public class ParserTest {
+    private Parser parser;
+
+    @BeforeTest
+    void setup() {
+        parser = Parser.getInstance();
+    }
 
     /**
-     * Basic entry parsing test.
+     * Entry parsing test.
      */
     @Test
-    public void testEntryParse() {
+    public void testParseEntry() {
         String entryStr =
                 "@TEST{citation_key," +
                         "key1 = 123," +
@@ -22,9 +29,7 @@ public class ParserTest {
                         "author = \"author\"" +
                         "}";
 
-        System.out.println(entryStr);
-
-        Entry entry = Parser.parseEntry(entryStr);
+        Entry entry = parser.parseEntry(entryStr);
         assertNotNull(entry);
 
         // Test simple values
@@ -47,5 +52,41 @@ public class ParserTest {
 
         // Test author parsing
         assertTrue(entry.getAuthorsLastNames().contains("author"));
+    }
+
+    /**
+     * Field parsing test.
+     */
+    @Test
+    public void testParseField() {
+        String field1Str = "key = \"string\"";
+        String field2Str = "year = 1987";
+        String field3Str = "month = sep";
+        String field4Str = "note = \"Hello \" # \"world!\"";
+        String field5Str = "month = sep # \"-\" # oct";
+
+        Field field1 = parser.parseField(field1Str);
+        Field field2 = parser.parseField(field2Str);
+        Field field3 = parser.parseField(field3Str);
+        Field field4 = parser.parseField(field4Str);
+        Field field5 = parser.parseField(field5Str);
+
+        assertEquals(field1.toString(), "key(string): string");
+        assertEquals(field2.toString(), "year(number): 1987");
+        assertEquals(field3.toString(), "month(reference): sep");
+        assertEquals(field4.toString(), "note(concatenation): \"Hello \" # \"world!\"");
+        assertEquals(field5.toString(), "month(concatenation): sep # \"-\" # oct");
+    }
+
+    /**
+     * Entry cutting test.
+     */
+    @Test
+    public void testCutEntry() {
+        String validEntryStr = "@TEST{citation_key, key = value, key2 = \"{value}\", key3 = 23}";
+        String entryStr = validEntryStr + ", key4 = 56}";
+
+        String cut = parser.cutEntry(entryStr, 0);
+        assertEquals(cut, validEntryStr);
     }
 }

@@ -332,7 +332,7 @@ public class Entry {
      * @param lastName   last name
      * @param authorType author's type (author or editor)
      */
-    private void addAuthor(String firstName, String lastName, AuthorType authorType) {
+    void addAuthor(String firstName, String lastName, AuthorType authorType) {
         Author author = new Author();
         author.firstName = firstName;
         author.lastName = lastName;

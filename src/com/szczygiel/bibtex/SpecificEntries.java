@@ -82,7 +82,7 @@ class SpecificEntries {
     /**
      * Return instance of this singleton class.
      *
-     * @return instanc eof {@link SpecificEntries}
+     * @return instance of {@link SpecificEntries}
      */
     static SpecificEntries getInstance() {
         return SpecificEntriesHolder.INSTANCE;

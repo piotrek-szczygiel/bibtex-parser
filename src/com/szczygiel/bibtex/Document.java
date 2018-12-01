@@ -67,7 +67,7 @@ public class Document {
             return;
         }
 
-        entries = Parser.parse(fileContents);
+        entries = Parser.getInstance().parseDocument(fileContents);
 
         Strings strings = new Strings();
         strings.extractFrom(entries);

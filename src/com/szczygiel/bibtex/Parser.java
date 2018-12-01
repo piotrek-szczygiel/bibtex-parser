@@ -6,12 +6,30 @@ import java.util.regex.Matcher;
 
 /**
  * Parses BiBteX input.
+ * <p>
+ * Uses singleton design pattern.
  */
 class Parser {
     /**
      * Stores ending index of last {@link #cutEntry} result.
      */
-    static private int lastEndingIndex;
+    private int lastEndingIndex = 0;
+
+    /**
+     * Prevents creating new instance of this class.
+     */
+    private Parser() {
+
+    }
+
+    /**
+     * Return instance of this singleton class.
+     *
+     * @return instance of {@link Parser}
+     */
+    static Parser getInstance() {
+        return ParserHolder.INSTANCE;
+    }
 
     /**
      * Parses BiBteX input into list of {@link Entry entries}.
@@ -19,13 +37,12 @@ class Parser {
      * @param input BiBteX input
      * @return list of {@link Entry entries}
      */
-    static List<Entry> parse(String input) {
+    List<Entry> parseDocument(String input) {
         List<Entry> entries = new ArrayList<>();
 
         Matcher entryBeginningMatcher = Patterns.getInstance().matchEntryBeginning(input);
-        lastEndingIndex = 0;
         while (entryBeginningMatcher.find()) {
-            String entryStr = cutEntry(entryBeginningMatcher, input);
+            String entryStr = cutEntry(input, entryBeginningMatcher.start());
             if (entryStr == null) {
                 continue;
             }
@@ -36,6 +53,7 @@ class Parser {
             }
         }
 
+        lastEndingIndex = 0;
         return entries;
     }
 
@@ -44,12 +62,11 @@ class Parser {
      * <p>
      * Allows for nested brackets.
      *
-     * @param entryBeginningMatcher {@link Matcher} used for finding beginning of an entry
-     * @param input                 BiBteX input
+     * @param input           BiBteX input
+     * @param matchStartIndex index at which the entry begins
      * @return single BiBteX entry as {@link String}
      */
-    static private String cutEntry(Matcher entryBeginningMatcher, String input) {
-        int matchStartIndex = entryBeginningMatcher.start();
+    String cutEntry(String input, int matchStartIndex) {
         if (matchStartIndex < lastEndingIndex) {
             System.out.println("nested entries at byte: " + matchStartIndex);
             return null;
@@ -83,7 +100,7 @@ class Parser {
      * @param entryStr entry to parse
      * @return parsed {@link Entry}
      */
-    static Entry parseEntry(String entryStr) {
+    Entry parseEntry(String entryStr) {
         entryStr = entryStr.strip();
         Matcher entryMatcher = Patterns.getInstance().matchEntry(entryStr);
 
@@ -152,7 +169,7 @@ class Parser {
      * @param input BiBteX field
      * @return parsed {@link Field}
      */
-    static private Field parseField(String input) {
+    Field parseField(String input) {
         input = input.strip();
         if (input == null || input.equals("")) {
             return null;
@@ -213,5 +230,15 @@ class Parser {
         field.setValue(value);
         field.setType(type);
         return field;
+    }
+
+    /**
+     * Holds instance of this singleton class.
+     */
+    private static class ParserHolder {
+        /**
+         * Instance of this singleton class.
+         */
+        private static final Parser INSTANCE = new Parser();
     }
 }

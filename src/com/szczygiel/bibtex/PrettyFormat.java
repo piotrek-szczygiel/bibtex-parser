@@ -90,10 +90,9 @@ class PrettyFormat {
                 List<String> authors = new ArrayList<>();
 
                 for (Entry.Author author : entry.getAuthors()) {
-                    if (fieldKey.equals("author") && author.authorType == Entry.AuthorType.AUTHOR) {
-                        authors.add("• " + author.lastName + ", " + author.firstName);
-                    } else if (fieldKey.equals("editor") && author.authorType == Entry.AuthorType.EDITOR) {
-                        authors.add("• " + author.lastName + ", " + author.firstName);
+                    if ((fieldKey.equals("author") && author.authorType == Entry.AuthorType.AUTHOR) ||
+                            (fieldKey.equals("editor") && author.authorType == Entry.AuthorType.EDITOR)) {
+                        authors.add("• " + author.firstName + " " + author.lastName);
                     }
                 }
                 str.append(formatMultilineTableValue(authors.toArray(new String[0]), formatValue, keyWidth));
