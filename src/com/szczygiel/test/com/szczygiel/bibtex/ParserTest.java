@@ -1,6 +1,6 @@
 package com.szczygiel.bibtex;
 
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -11,7 +11,10 @@ import static org.testng.Assert.*;
 public class ParserTest {
     private Parser parser;
 
-    @BeforeTest
+    /**
+     * Setup before tests.
+     */
+    @BeforeClass
     void setup() {
         parser = Parser.getInstance();
     }

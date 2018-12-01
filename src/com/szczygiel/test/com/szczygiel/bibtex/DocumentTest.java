@@ -6,6 +6,9 @@ import java.util.Set;
 
 import static org.testng.Assert.assertEquals;
 
+/**
+ * Tests for BiBteX Document.
+ */
 public class DocumentTest {
     /**
      * Whole document test.

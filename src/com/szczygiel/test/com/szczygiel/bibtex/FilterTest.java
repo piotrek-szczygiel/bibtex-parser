@@ -8,8 +8,14 @@ import java.util.Set;
 
 import static org.testng.Assert.assertTrue;
 
+/**
+ * Tests for {@link Entry} filtering.
+ */
 public class FilterTest {
 
+    /**
+     * Test filtering by type.
+     */
     @Test
     public void testFilterTypes() {
         Entry entry1 = new Entry();
@@ -30,6 +36,9 @@ public class FilterTest {
         assertTrue(filteredEntries.containsAll(List.of(entry1, entry2, entry4)));
     }
 
+    /**
+     * Test filtering by author.
+     */
     @Test
     public void testFilterAuthors() {
         Entry entry1 = new Entry();
