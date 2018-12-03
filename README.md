@@ -18,7 +18,15 @@
 ## Usage
 
 ```bash
-java -jar bibtex-parser.jar -f "file.bib" -a "Author1,Author2" -t "book,article"
+java -jar bibtex-parser.jar -f <file> -t <type1,type2,...> -a <author1,author2,...>
 ```
 
 ![Usage](usage.png)
+
+## Example
+
+```bash
+java -jar bibtex-parser.jar -f example.bib -t book -a Knuth
+```
+
+![Example](example.png)
