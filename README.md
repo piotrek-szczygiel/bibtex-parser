@@ -21,5 +21,4 @@
 java -jar bibtex-parser.jar -f "file.bib" -a "Author1,Author2" -t "book,article"
 ```
 
-### Command help
 ![Usage](usage.png)
