@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
         optionListHeading = "%n@|bold,underline Options:|@%n",
         header = "Display filtered entries from BibTeX file.",
         description = "Parses the specified BibTeX file, then displays only those entries " +
-                "that match specified filters")
+                "that match specified filters.")
 public class Main implements Runnable {
     /*
     This program uses picocli package to handle program arguments.
