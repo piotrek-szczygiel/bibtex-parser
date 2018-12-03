@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Main program class.
@@ -73,7 +74,11 @@ public class Main implements Runnable {
      * <p>
      * Display {@link Filter filtered} {@link Entry entries}.
      */
+    @Override
     public void run() {
+        // Convert entry types from arguments to lowercase, so they match those from entry objects
+        entryTypes = entryTypes.stream().map(String::toLowerCase).collect(Collectors.toSet());
+
         Document document = new Document();
         if (document.loadFile(file)) {
             document.parse();

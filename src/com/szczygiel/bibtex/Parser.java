@@ -42,13 +42,17 @@ class Parser {
 
         Matcher entryBeginningMatcher = Patterns.getInstance().matchEntryBeginning(input);
         while (entryBeginningMatcher.find()) {
-            String entryStr = cutEntry(input, entryBeginningMatcher.start());
+            int index = entryBeginningMatcher.start();
+            int line = getLineNumber(input, index);
+
+            String entryStr = cutEntry(input, index);
             if (entryStr == null) {
                 continue;
             }
 
             Entry entry = parseEntry(entryStr);
             if (entry != null) {
+                entry.setLineNumber(line);
                 entries.add(entry);
             }
         }
@@ -230,6 +234,30 @@ class Parser {
         field.setValue(value);
         field.setType(type);
         return field;
+    }
+
+    /**
+     * Get line number from byte index.
+     *
+     * @param input input multiline string
+     * @param index index of the cursor position
+     * @return line number
+     */
+    private int getLineNumber(String input, int index) {
+        int line = 1;
+        for (int i = 0; i < index; i++) {
+            char c = input.charAt(i);
+            if (c == '\r') {
+                line++;
+                if (i + 1 < index && input.charAt(i + 1) == '\n') {
+                    i++;
+                }
+            } else if (c == '\n') {
+                line++;
+            }
+        }
+
+        return line;
     }
 
     /**

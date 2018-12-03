@@ -69,6 +69,11 @@ public class Entry {
     private List<Field> fields;
 
     /**
+     * Line number in file at which this entry exists.
+     */
+    private int lineNumber;
+
+    /**
      * Fill {@link #authors} based on author or editor fields.
      */
     void fillAuthors() {
@@ -221,6 +226,25 @@ public class Entry {
         }
 
         return lastNames;
+    }
+
+
+    /**
+     * Get {@link #lineNumber}.
+     *
+     * @return line number
+     */
+    int getLineNumber() {
+        return lineNumber;
+    }
+
+    /**
+     * Set {@link #lineNumber}.
+     *
+     * @param lineNumber line number
+     */
+    void setLineNumber(int lineNumber) {
+        this.lineNumber = lineNumber;
     }
 
     /**

@@ -104,7 +104,12 @@ public class Document {
             SpecificEntries specificEntries = SpecificEntries.getInstance();
             SpecificEntries.SpecificEntry specificEntry = specificEntries.get(entry.getEntryType());
             if (specificEntry == null) {
-                continue;
+                if (entry.getEntryType().equals("string")) {
+                    continue;
+                }
+
+                throw new IllegalArgumentException("invalid entry type in line " +
+                        entry.getLineNumber() + ": " + entry.getEntryType());
             }
 
 
@@ -161,8 +166,8 @@ public class Document {
                 if (found) {
                     correctEntry.addField(entry.getField(key));
                 } else {  // If current entry didn't contain one of required entries - throw an exception
-                    throw new IllegalArgumentException("Entry " + entry.getCitationKey() + ", does not contain " +
-                            "required field: " + requiredField);
+                    throw new IllegalArgumentException("Entry " + entry.getCitationKey() + " in line " +
+                            entry.getLineNumber() + ", doesn't contain required field: " + requiredField);
                 }
             }
 
