@@ -6,7 +6,7 @@ import java.util.List;
 import static java.lang.Math.max;
 
 /**
- * ASCII art table formatter for BiBteX entries.
+ * ASCII art table formatter for BibTeX entries.
  */
 class PrettyFormat {
 

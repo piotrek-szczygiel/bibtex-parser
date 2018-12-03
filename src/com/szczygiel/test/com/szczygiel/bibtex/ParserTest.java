@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Tests for the BiBteX parser.
+ * Tests for the BibTeX parser.
  */
 public class ParserTest {
     private Parser parser;

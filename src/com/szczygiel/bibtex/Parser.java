@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 /**
- * Parses BiBteX input.
+ * Parses BibTeX input.
  * <p>
  * Uses singleton design pattern.
  */
@@ -32,9 +32,9 @@ class Parser {
     }
 
     /**
-     * Parses BiBteX input into list of {@link Entry entries}.
+     * Parses BibTeX input into list of {@link Entry entries}.
      *
-     * @param input BiBteX input
+     * @param input BibTeX input
      * @return list of {@link Entry entries}
      */
     List<Entry> parseDocument(String input) {
@@ -66,9 +66,9 @@ class Parser {
      * <p>
      * Allows for nested brackets.
      *
-     * @param input           BiBteX input
+     * @param input           BibTeX input
      * @param matchStartIndex index at which the entry begins
-     * @return single BiBteX entry as {@link String}
+     * @return single BibTeX entry as {@link String}
      */
     String cutEntry(String input, int matchStartIndex) {
         if (matchStartIndex < lastEndingIndex) {
@@ -97,7 +97,7 @@ class Parser {
     }
 
     /**
-     * Parses BiBteX entry into an {@link Entry} object.
+     * Parses BibTeX entry into an {@link Entry} object.
      * <p>
      * Ignores @PREAMBLE and @COMMENT entries.
      *
@@ -168,9 +168,9 @@ class Parser {
     }
 
     /**
-     * Parses BiBteX field into a {@link Field} object.
+     * Parses BibTeX field into a {@link Field} object.
      *
-     * @param input BiBteX field
+     * @param input BibTeX field
      * @return parsed {@link Field}
      */
     Field parseField(String input) {

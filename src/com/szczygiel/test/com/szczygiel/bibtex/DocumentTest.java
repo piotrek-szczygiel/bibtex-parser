@@ -7,7 +7,7 @@ import java.util.Set;
 import static org.testng.Assert.assertEquals;
 
 /**
- * Tests for BiBteX Document.
+ * Tests for BibTeX Document.
  */
 public class DocumentTest {
     /**

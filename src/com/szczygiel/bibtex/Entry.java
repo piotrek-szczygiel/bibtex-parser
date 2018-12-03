@@ -52,7 +52,7 @@ public class Entry {
     /**
      * Citation key of an entry.
      * <p>
-     * Citation key can be defined inside BiBteX file like this: @TYPE{citation_key
+     * Citation key can be defined inside BibTeX file like this: @TYPE{citation_key
      */
     private String citationKey;
 

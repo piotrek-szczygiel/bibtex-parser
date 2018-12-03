@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * Stores whole BiBteX document as list of {@link Entry entries}.
+ * Stores whole BibTeX document as list of {@link Entry entries}.
  * <p>
  * Provides {@link Filter filtering} and {@link PrettyFormat printing ASCII tables}.
  */
@@ -19,7 +19,7 @@ public class Document {
     private List<Entry> entries;
 
     /**
-     * Contents of a BiBteX file as a {@link String}.
+     * Contents of a BibTeX file as a {@link String}.
      */
     private String fileContents;
 
@@ -34,9 +34,9 @@ public class Document {
     }
 
     /**
-     * Load BiBteX document from {@link File}.
+     * Load BibTeX document from {@link File}.
      *
-     * @param file BiBteX {@link File}.
+     * @param file BibTeX {@link File}.
      * @return success
      */
     boolean loadFile(File file) {
@@ -60,7 +60,7 @@ public class Document {
     }
 
     /**
-     * Parse BiBteX document.
+     * Parse BibTeX document.
      */
     void parse() {
         if (fileContents.equals("")) {

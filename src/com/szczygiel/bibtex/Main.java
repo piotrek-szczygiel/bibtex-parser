@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * <p>
  * You run this program with following arguments:
  * <ul>
- * <li>-f, --file=FILE<br>path to BiBteX file</li>
+ * <li>-f, --file=FILE<br>path to BibTeX file</li>
  * <li>-a, --author=AUTHOR[,AUTHOR...]<br>author(s) to search for</li>
  * <li>-t, --type=TYPE[,TYPE...]<br>entry type(s) to search for</li>
  * <li>-h, --help<br>show help message and exit</li>
@@ -25,14 +25,14 @@ import java.util.stream.Collectors;
 @Command(name = "bibtex-parser",
         mixinStandardHelpOptions = true,
         sortOptions = false,
-        version = "BiBteX parser v0.1 by Piotr Szczygieł 2018",
+        version = "BibTeX parser v0.1 by Piotr Szczygieł 2018",
         headerHeading = "@|bold,underline Usage:|@%n%n",
         synopsisHeading = "%n",
         descriptionHeading = "%n@|bold,underline Description:|@%n%n",
         parameterListHeading = "%n@|bold,underline Parameters:|@%n",
         optionListHeading = "%n@|bold,underline Options:|@%n",
-        header = "Display filtered entries from BiBteX file.",
-        description = "Parses the specified BiBteX file, then displays only those entries " +
+        header = "Display filtered entries from BibTeX file.",
+        description = "Parses the specified BibTeX file, then displays only those entries " +
                 "that match specified filters")
 public class Main implements Runnable {
     /*
@@ -44,7 +44,7 @@ public class Main implements Runnable {
     /**
      * {@link File} to parse.
      */
-    @Option(names = {"-f", "--file"}, required = true, paramLabel = "FILE", description = "path to BiBteX file")
+    @Option(names = {"-f", "--file"}, required = true, paramLabel = "FILE", description = "path to BibTeX file")
     private File file;
 
     /**
