@@ -42,7 +42,7 @@ public class Document {
         try {
             fileContents = new String(Files.readAllBytes(file.toPath()));
         } catch (IOException e) {
-            System.out.println("unable to open file: " + file.getAbsolutePath());
+            System.err.println("unable to open file: " + file.getAbsolutePath());
             return false;
         }
 
@@ -86,8 +86,89 @@ public class Document {
             }
         }
 
+        checkDuplicates();
+        fillCrossreferences();
         validate();
         fillAuthors();
+    }
+
+    /**
+     * Check for duplicates - entries having same citation key.
+     */
+    private void checkDuplicates() {
+        for (Entry entry : entries) {
+            SingletonSpecificEntries specificEntries = SingletonSpecificEntries.getInstance();
+            SingletonSpecificEntries.SpecificEntry specificEntry = specificEntries.get(entry.getEntryType());
+            if (specificEntry == null) {
+                continue;
+            }
+
+            String citationKey = entry.getCitationKey();
+            for (Entry otherEntry : entries) {
+                // Don't compare entry to itself
+                if (entry == otherEntry) {
+                    continue;
+                }
+
+                String otherCitationKey = otherEntry.getCitationKey();
+                if (citationKey.equals(otherCitationKey)) {
+                    throw new IllegalArgumentException("Entry redefinition in line " +
+                            otherEntry.getLineNumber() + ": " + citationKey);
+                }
+            }
+        }
+    }
+
+    /**
+     * Fill fields from crossreferenced entries.
+     */
+    private void fillCrossreferences() {
+        for (Entry entry : entries) {
+            boolean crossreferences = false;
+            Entry crossrefEntry = null;
+
+            for (Field field : entry.getFields()) {
+                if (field.getKey().equals("crossref") && field.getType() == Field.Type.STRING) {
+                    crossreferences = true;
+                    String crossref = (String) field.getValue();
+
+                    // Entry crossreferencing itself
+                    if (crossref.equals(entry.getCitationKey())) {
+                        throw new IllegalArgumentException("Entry self crossreference in line " +
+                                entry.getLineNumber() + ": " + entry.getCitationKey());
+                    }
+
+                    for (Entry crossrefEntrySearch : entries) {
+                        if (crossrefEntrySearch.getCitationKey().equals(crossref)) {
+                            crossrefEntry = crossrefEntrySearch;
+                        }
+                    }
+
+                    if (crossrefEntry == null) {
+                        throw new IllegalArgumentException("Unknown crossreference in line " +
+                                entry.getLineNumber() + ": " + crossref);
+                    }
+                }
+            }
+
+            if (crossreferences) {
+                for (Field crossrefField : crossrefEntry.getFields()) {
+                    boolean found = false;
+
+                    // Find if crossreferencing entry already implements the field
+                    for (Field field : entry.getFields()) {
+                        if (field.getKey().equals(crossrefField.getKey())) {
+                            found = true;
+                        }
+                    }
+
+                    // Add missing field
+                    if (!found) {
+                        entry.addField(crossrefField);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -103,7 +184,7 @@ public class Document {
             SingletonSpecificEntries specificEntries = SingletonSpecificEntries.getInstance();
             SingletonSpecificEntries.SpecificEntry specificEntry = specificEntries.get(entry.getEntryType());
             if (specificEntry == null) {
-                if (entry.getEntryType().equals("string")) {
+                if (entry.getEntryType().equals("string") || entry.getEntryType().equals("crossref")) {
                     continue;
                 }
 
@@ -117,6 +198,12 @@ public class Document {
             correctEntry.setCitationKey(entry.getCitationKey());
 
             List<Field> fields = entry.getFields();
+
+            for (Field field : fields) {
+                if (field.getKey().equals("crossref")) {
+                    correctEntry.addField(field);
+                }
+            }
 
             // Check for required fields
             for (String requiredField : specificEntry.requiredFields) {

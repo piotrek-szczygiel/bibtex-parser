@@ -96,7 +96,7 @@ class SingletonParser {
      */
     String cutEntry(String input, int matchStartIndex) {
         if (matchStartIndex < lastEndingIndex) {
-            System.out.println("nested entries at byte: " + matchStartIndex);
+            System.err.println("nested entries at byte: " + matchStartIndex);
             return null;
         }
 
@@ -147,7 +147,7 @@ class SingletonParser {
         }
 
         if (entryMatcher.groupCount() < 4) {
-            System.out.println("invalid group count: " + entryMatcher.groupCount()
+            System.err.println("invalid group count: " + entryMatcher.groupCount()
                     + "for entry: " + entryMatcher.group(0));
             return null;
         }
@@ -156,13 +156,13 @@ class SingletonParser {
         if (citationKey != null) {
             entry.setCitationKey(citationKey);
         } else if (!entryType.equals("string")) { // Everything but @String need citation key
-            System.out.println("entry without citation key: " + entryMatcher.group(0));
+            System.err.println("entry without citation key: " + entryMatcher.group(0));
             return null;
         }
 
         String keyValueStructure = entryMatcher.group(3);
         if (keyValueStructure == null) {
-            System.out.println("entry without key value structure: " + entryMatcher.group(0));
+            System.err.println("entry without key value structure: " + entryMatcher.group(0));
             return null;
         }
         Matcher fieldMatcher = SingletonPatterns.getInstance().matchField(keyValueStructure);
@@ -181,7 +181,7 @@ class SingletonParser {
             if (field.getType() == Field.Type.UNKNOWN) {
                 String raw = field.getRaw();
                 raw = raw.replaceAll("\\r\\n|\\r|\\n", "\n\t");
-                System.out.println("cannot parse field in entry " + entry.getCitationKey() + ":\n\t" + raw);
+                System.err.println("cannot parse field in entry " + entry.getCitationKey() + ":\n\t" + raw);
                 continue;
             }
 

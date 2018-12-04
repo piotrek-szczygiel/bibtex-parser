@@ -76,7 +76,7 @@ class SingletonPatterns {
      */
     private Pattern concatenationField = Pattern.compile("(?s)"
             + "(\"[^\"]*\"|[a-zA-Z_][\\w-]*)\\s*" // string or reference
-            + "(#)?(.*)"                              // hash character
+            + "(#)?(.*)"                          // hash character
     );
 
     /**

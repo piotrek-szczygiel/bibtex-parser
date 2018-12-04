@@ -30,11 +30,11 @@ class Strings {
             for (Field field : fields) {
                 String key = field.getKey();
                 if (strings.containsKey(key)) {
-                    System.out.println("redefinition in @strings: " + field);
+                    System.err.println("redefinition in @strings: " + field);
                 }
 
                 if (field.getType() != Field.Type.STRING) {
-                    System.out.println("non string object in @string: " + field);
+                    System.err.println("non string object in @string: " + field);
                     continue;
                 }
 

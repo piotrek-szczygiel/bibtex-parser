@@ -248,7 +248,7 @@ public class Entry {
                 String reference = (String) field.getValue();
                 String value = strings.getString(reference);
                 if (value == null) {
-                    System.out.println("unable to access string reference in " + this.citationKey + ": " + reference);
+                    System.err.println("unable to access string reference in " + this.citationKey + ": " + reference);
                     field.setType(Field.Type.UNKNOWN);
                     continue;
                 }
@@ -296,7 +296,7 @@ public class Entry {
                     } else {
                         String valueNullable = strings.getString(value);
                         if (valueNullable == null) {
-                            System.out.println("unable to access string reference in "
+                            System.err.println("unable to access string reference in "
                                     + this.citationKey + ": " + value);
                             error = true;
                             break;
@@ -308,7 +308,7 @@ public class Entry {
 
                     if (hash == null) {
                         if (!rest.equals("")) {
-                            System.out.println("error while concatenating: " + concatenation);
+                            System.err.println("error while concatenating: " + concatenation);
                             error = true;
                         }
 
