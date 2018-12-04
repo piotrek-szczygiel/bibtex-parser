@@ -23,7 +23,12 @@
    dev = "grudzień"
 }
 
-
+@STRING{
+   multiline_string = "
+This is a multiline string.
+This is a second line.
+This is a third line."
+}
 
 @ARTICLE{article-full,
    author = "Leslie A. Aamport",
@@ -205,5 +210,5 @@ information).
 
 @MISC{random-note-crossref,
    key = "{Volume-2}",
-   note = "Volume~2 is listed under Knuth \cite{book-full}"
+   note = "Volume~2 is listed under Knuth \cite{book-full}" # multiline_string
 }

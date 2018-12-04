@@ -3,20 +3,25 @@ package com.szczygiel.bibtex;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.List;
+
 import static org.testng.Assert.*;
 
 /**
  * Tests for the BibTeX parser.
  */
-public class ParserTest {
-    private Parser parser;
+public class SingletonParserTest {
+    /**
+     * {@link SingletonParser} instance.
+     */
+    private SingletonParser parser;
 
     /**
      * Setup before tests.
      */
     @BeforeClass
     void setup() {
-        parser = Parser.getInstance();
+        parser = SingletonParser.getInstance();
     }
 
     /**
@@ -55,6 +60,35 @@ public class ParserTest {
 
         // Test author parsing
         assertTrue(entry.getAuthorsLastNames().contains("author"));
+    }
+
+    /**
+     * Invalid entry parsing test.
+     */
+    @Test
+    public void testParseInvalidEntry() {
+        String entryStr =
+                "@TEST{citation_key," +
+                        "key1 = 123" +
+                        "key2 = \"123\"," +
+                        "key3 = c # d," +
+                        "author = \"author\"" +
+                        "}";
+
+        Entry entry = parser.parseEntry(entryStr);
+        assertNotNull(entry);
+
+        Field key3 = new Field();
+        key3.setType(Field.Type.CONCATENATION);
+        key3.setKey("key3");
+        key3.setValue("c # d");
+
+        Field author = new Field();
+        author.setType(Field.Type.STRING);
+        author.setKey("author");
+        author.setValue("author");
+
+        assertEquals(entry.getFields(), List.of(key3, author));
     }
 
     /**

@@ -23,7 +23,6 @@ public class Document {
      */
     private String fileContents;
 
-
     /**
      * Get {@link #entries}.
      *
@@ -67,7 +66,7 @@ public class Document {
             return;
         }
 
-        entries = Parser.getInstance().parseDocument(fileContents);
+        entries = SingletonParser.getInstance().parseDocument(fileContents);
 
         Strings strings = new Strings();
         strings.extractFrom(entries);
@@ -92,7 +91,7 @@ public class Document {
     }
 
     /**
-     * Check if all {@link #entries} are valid according to {@link SpecificEntries}.
+     * Check if all {@link #entries} are valid according to {@link SingletonSpecificEntries}.
      * <p>
      * Remove ignored fields.
      * Throw exception on missing required fields.
@@ -101,8 +100,8 @@ public class Document {
         List<Entry> correctEntries = new ArrayList<>();
 
         for (Entry entry : entries) {
-            SpecificEntries specificEntries = SpecificEntries.getInstance();
-            SpecificEntries.SpecificEntry specificEntry = specificEntries.get(entry.getEntryType());
+            SingletonSpecificEntries specificEntries = SingletonSpecificEntries.getInstance();
+            SingletonSpecificEntries.SpecificEntry specificEntry = specificEntries.get(entry.getEntryType());
             if (specificEntry == null) {
                 if (entry.getEntryType().equals("string")) {
                     continue;

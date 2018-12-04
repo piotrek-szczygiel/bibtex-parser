@@ -6,6 +6,8 @@ import java.util.Set;
 
 /**
  * Filter {@link Entry entries} using specific requirements.
+ * <p>
+ * Uses static class design pattern.
  */
 class Filter {
     /**

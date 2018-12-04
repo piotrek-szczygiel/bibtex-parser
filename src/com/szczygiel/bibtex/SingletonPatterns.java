@@ -8,13 +8,14 @@ import java.util.regex.Pattern;
  * <p>
  * Uses singleton design pattern.
  */
-class Patterns {
+class SingletonPatterns {
     /**
      * Matches beginning of an entry.
      */
     private Pattern entryBeginning = Pattern.compile("(?m)"
             + "^@([a-zA-Z_][\\w-]*)" // beginning of an entry
     );
+
     /**
      * Matches whole entry, catching entry type, citation key and its body.
      */
@@ -23,12 +24,14 @@ class Patterns {
             + "\\{(?:\\s*([a-zA-Z_][\\w-]*)\\s*,\\s*)?" // citation key
             + "((.)*)\\s*}"                             // entry contents
     );
+
     /**
      * Matches a field separated by comma.
      */
     private Pattern field = Pattern.compile("(?m)"
             + "([^,]*),?" // comma separated fields
     );
+
     /**
      * Matches assignment of a string to a key.
      */
@@ -37,6 +40,7 @@ class Patterns {
             + "=\\s*"
             + "\"(([^\"])*)\"\\s*$"     // string value
     );
+
     /**
      * Matches assignment of a number to a key.
      */
@@ -45,6 +49,7 @@ class Patterns {
             + "=\\s*"
             + "(\\d+)\\s*$"             // number value
     );
+
     /**
      * Matches assignment of a reference to a key.
      */
@@ -53,6 +58,7 @@ class Patterns {
             + "=\\s*"
             + "([a-zA-Z_][\\w-]*)\\s*$" // reference value
     );
+
     /**
      * Matches concatenation.
      * <p>
@@ -62,6 +68,7 @@ class Patterns {
             + "^([a-zA-Z_][\\w-]*)\\s*" // concatenation name
             + "=\\s*((.)*#(.)*)\\s*$"   // concatenation contents
     );
+
     /**
      * Matches single concatenation field.
      * <p>
@@ -71,6 +78,22 @@ class Patterns {
             + "(\"[^\"]*\"|[a-zA-Z_][\\w-]*)\\s*" // string or reference
             + "(#)?(.*)"                              // hash character
     );
+
+    /**
+     * Prevents creating new instance of this class.
+     */
+    private SingletonPatterns() {
+
+    }
+
+    /**
+     * Return instance of this singleton class.
+     *
+     * @return instance of {@link SingletonPatterns}
+     */
+    static SingletonPatterns getInstance() {
+        return PatternsHolder.INSTANCE;
+    }
 
     /**
      * Match {@link #entryBeginning}.
@@ -153,28 +176,12 @@ class Patterns {
     }
 
     /**
-     * Prevents creating new instance of this class.
-     */
-    private Patterns() {
-
-    }
-
-    /**
-     * Return instance of this singleton class.
-     *
-     * @return instance of {@link Patterns}
-     */
-    static Patterns getInstance() {
-        return PatternsHolder.INSTANCE;
-    }
-
-    /**
      * Holds instance of this singleton class.
      */
     private static class PatternsHolder {
         /**
          * Instance of this singleton class.
          */
-        private static final Patterns INSTANCE = new Patterns();
+        private static final SingletonPatterns INSTANCE = new SingletonPatterns();
     }
 }

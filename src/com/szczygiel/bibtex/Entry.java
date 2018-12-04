@@ -8,43 +8,6 @@ import java.util.regex.Matcher;
  */
 public class Entry {
     /**
-     * Stores information about author's names.
-     */
-    class Author {
-        /**
-         * Author's first name.
-         */
-        String firstName;
-
-        /**
-         * Author's last name.
-         */
-        String lastName;
-
-        /**
-         * Author's type.
-         * <p>
-         * Can be author or editor.
-         */
-        AuthorType authorType;
-    }
-
-    /**
-     * Author's type.
-     */
-    enum AuthorType {
-        /**
-         * This means that this author was specified like this: author = "name".
-         */
-        AUTHOR,
-
-        /**
-         * This means that this author was specified like this: editor = "name".
-         */
-        EDITOR
-    }
-
-    /**
      * Set of authors' names used later in filtering.
      */
     private Set<Author> authors;
@@ -72,6 +35,18 @@ public class Entry {
      * Line number in file at which this entry exists.
      */
     private int lineNumber;
+
+    /**
+     * Constructor for {@link Entry}.
+     * <p>
+     * Initializes members with default values.
+     */
+    Entry() {
+        entryType = "";
+        citationKey = "";
+        fields = new ArrayList<>();
+        authors = new LinkedHashSet<>();
+    }
 
     /**
      * Fill {@link #authors} based on author or editor fields.
@@ -124,6 +99,21 @@ public class Entry {
                 }
             }
         }
+    }
+
+    /**
+     * Add author to {@link #authors}.
+     *
+     * @param firstName  first name
+     * @param lastName   last name
+     * @param authorType author's type (author or editor)
+     */
+    void addAuthor(String firstName, String lastName, AuthorType authorType) {
+        Author author = new Author();
+        author.firstName = firstName;
+        author.lastName = lastName;
+        author.authorType = authorType;
+        authors.add(author);
     }
 
     /**
@@ -220,7 +210,7 @@ public class Entry {
      * @return authors last names
      */
     Set<String> getAuthorsLastNames() {
-        Set<String> lastNames = new HashSet<>();
+        Set<String> lastNames = new LinkedHashSet<>();
         for (Author author : authors) {
             lastNames.add(author.lastName);
         }
@@ -245,18 +235,6 @@ public class Entry {
      */
     void setLineNumber(int lineNumber) {
         this.lineNumber = lineNumber;
-    }
-
-    /**
-     * Constructor for {@link Entry}.
-     * <p>
-     * Initializes members with default values.
-     */
-    Entry() {
-        entryType = "";
-        citationKey = "";
-        fields = new ArrayList<>();
-        authors = new HashSet<>();
     }
 
     /**
@@ -294,7 +272,7 @@ public class Entry {
                 StringBuilder finalValue = new StringBuilder();
                 String concatenation = (String) field.getValue();
 
-                Matcher concatMatcher = Patterns.getInstance().matchConcatenationField(concatenation);
+                Matcher concatMatcher = SingletonPatterns.getInstance().matchConcatenationField(concatenation);
 
                 boolean error = false;
                 while (concatMatcher.find()) {
@@ -350,21 +328,6 @@ public class Entry {
     }
 
     /**
-     * Add author to {@link #authors}.
-     *
-     * @param firstName  first name
-     * @param lastName   last name
-     * @param authorType author's type (author or editor)
-     */
-    void addAuthor(String firstName, String lastName, AuthorType authorType) {
-        Author author = new Author();
-        author.firstName = firstName;
-        author.lastName = lastName;
-        author.authorType = authorType;
-        authors.add(author);
-    }
-
-    /**
      * Convert entry into readable structure.
      *
      * @return readable entry
@@ -381,5 +344,42 @@ public class Entry {
         }
 
         return str.toString();
+    }
+
+    /**
+     * Author's type.
+     */
+    enum AuthorType {
+        /**
+         * This means that this author was specified like this: author = "name".
+         */
+        AUTHOR,
+
+        /**
+         * This means that this author was specified like this: editor = "name".
+         */
+        EDITOR
+    }
+
+    /**
+     * Stores information about author's names.
+     */
+    class Author {
+        /**
+         * Author's first name.
+         */
+        String firstName;
+
+        /**
+         * Author's last name.
+         */
+        String lastName;
+
+        /**
+         * Author's type.
+         * <p>
+         * Can be author or editor.
+         */
+        AuthorType authorType;
     }
 }

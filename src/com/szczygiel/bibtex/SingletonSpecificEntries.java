@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @see <a href="https://pl.wikipedia.org/wiki/BibTeX#Struktura_plik.C3.B3w_bazy_bibliograficznej">Wikipedia article</a>
  */
-class SpecificEntries {
+class SingletonSpecificEntries {
     /**
      * Stores map of entry types and its required and optional fields.
      */
@@ -20,7 +20,7 @@ class SpecificEntries {
     /**
      * Populates {@link #specificEntries}.
      */
-    private SpecificEntries() {
+    private SingletonSpecificEntries() {
         specificEntries.put("article",
                 new SpecificEntry(
                         List.of("author", "title", "journal", "year"),
@@ -82,9 +82,9 @@ class SpecificEntries {
     /**
      * Return instance of this singleton class.
      *
-     * @return instance of {@link SpecificEntries}
+     * @return instance of {@link SingletonSpecificEntries}
      */
-    static SpecificEntries getInstance() {
+    static SingletonSpecificEntries getInstance() {
         return SpecificEntriesHolder.INSTANCE;
     }
 
@@ -133,6 +133,6 @@ class SpecificEntries {
         /**
          * Instance of this singleton class.
          */
-        private static final SpecificEntries INSTANCE = new SpecificEntries();
+        private static final SingletonSpecificEntries INSTANCE = new SingletonSpecificEntries();
     }
 }

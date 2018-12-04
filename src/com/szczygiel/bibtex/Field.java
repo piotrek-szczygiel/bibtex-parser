@@ -10,16 +10,19 @@ class Field {
      * E.g. key = "value"
      */
     private String key;
+
     /**
      * Raw value of a field.
      * <p>
      * It is field's value before parsing.
      */
     private String raw;
+
     /**
      * {@link Type Field's type}.
      */
     private Type type = Type.UNKNOWN;
+
     /**
      * Field's value.
      * <p>
@@ -102,33 +105,21 @@ class Field {
     }
 
     /**
-     * Available types of fields.
+     * Compare objects.
+     *
+     * @param o other object
+     * @return true if they are equal, otherwise false
      */
-    enum Type {
-        /**
-         * Simple string value.
-         */
-        STRING,
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        /**
-         * Integer value.
-         */
-        NUMBER,
+        Field field = (Field) o;
 
-        /**
-         * Reference to string stored in {@link Strings}.
-         */
-        REFERENCE,
-
-        /**
-         * Concatenation of combination of strings and references.
-         */
-        CONCATENATION,
-
-        /**
-         * Unknown, invalid field type.
-         */
-        UNKNOWN
+        if (!key.equals(field.key)) return false;
+        if (type != field.type) return false;
+        return value.equals(field.value);
     }
 
     /**
@@ -158,5 +149,35 @@ class Field {
         }
 
         return str;
+    }
+
+    /**
+     * Available types of fields.
+     */
+    enum Type {
+        /**
+         * Simple string value.
+         */
+        STRING,
+
+        /**
+         * Integer value.
+         */
+        NUMBER,
+
+        /**
+         * Reference to string stored in {@link Strings}.
+         */
+        REFERENCE,
+
+        /**
+         * Concatenation of combination of strings and references.
+         */
+        CONCATENATION,
+
+        /**
+         * Unknown, invalid field type.
+         */
+        UNKNOWN
     }
 }

@@ -7,9 +7,10 @@ import static java.lang.Math.max;
 
 /**
  * ASCII art table formatter for BibTeX entries.
+ * <p>
+ * Uses static class design pattern.
  */
 class PrettyFormat {
-
     /**
      * Convert entry into an ASCII table.
      *

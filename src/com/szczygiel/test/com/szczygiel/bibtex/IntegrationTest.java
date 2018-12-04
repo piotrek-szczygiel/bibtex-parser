@@ -7,14 +7,14 @@ import java.util.Set;
 import static org.testng.Assert.assertEquals;
 
 /**
- * Tests for BibTeX Document.
+ * Integration tests for BibTeX Document.
  */
-public class DocumentTest {
+public class IntegrationTest {
     /**
      * Whole document test.
      */
     @Test
-    public void testFileParse() {
+    public void testWholeDocument() {
         String fileStr =
                 "% Copyright (C) 1988, 2010 Oren Patashnik.\n" +
                         "% Unlimited copying and redistribution of this file are permitted if it\n" +
@@ -137,7 +137,7 @@ public class DocumentTest {
     }
 
     /**
-     * Validation test.
+     * Field validation test.
      * <p>
      * This test checks if exception is thrown (as it should).
      */
@@ -175,6 +175,24 @@ public class DocumentTest {
                 "   month = \"kwiecień\",\n" +
                 "   year = 1986,\n" +
                 "   note = \"This is a full MANUAL entry\"\n" +
+                "}";
+
+        Document document = new Document();
+        document.loadString(fileStr);
+        document.parse();
+    }
+
+
+    /**
+     * Entry type validation test.
+     * <p>
+     * This test checks if exception is thrown (as it should).
+     */
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testValidateInvalidEntryType() {
+        String fileStr = "@INVALID_ENTRY_TYPE{some_citation_key,\n" +
+                "    author = \"Piotr Szczygieł\",\n" +
+                "    note = \"This entry has invalid entry type.\"\n" +
                 "}";
 
         Document document = new Document();

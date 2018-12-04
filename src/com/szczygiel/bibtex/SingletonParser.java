@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
  * <p>
  * Uses singleton design pattern.
  */
-class Parser {
+class SingletonParser {
     /**
      * Stores ending index of last {@link #cutEntry} result.
      */
@@ -18,16 +18,16 @@ class Parser {
     /**
      * Prevents creating new instance of this class.
      */
-    private Parser() {
+    private SingletonParser() {
 
     }
 
     /**
      * Return instance of this singleton class.
      *
-     * @return instance of {@link Parser}
+     * @return instance of {@link SingletonParser}
      */
-    static Parser getInstance() {
+    static SingletonParser getInstance() {
         return ParserHolder.INSTANCE;
     }
 
@@ -40,7 +40,7 @@ class Parser {
     List<Entry> parseDocument(String input) {
         List<Entry> entries = new ArrayList<>();
 
-        Matcher entryBeginningMatcher = Patterns.getInstance().matchEntryBeginning(input);
+        Matcher entryBeginningMatcher = SingletonPatterns.getInstance().matchEntryBeginning(input);
         while (entryBeginningMatcher.find()) {
             int index = entryBeginningMatcher.start();
             int line = getLineNumber(input, index);
@@ -59,6 +59,30 @@ class Parser {
 
         lastEndingIndex = 0;
         return entries;
+    }
+
+    /**
+     * Get line number from byte index.
+     *
+     * @param input input multiline string
+     * @param index index of the cursor position
+     * @return line number
+     */
+    private int getLineNumber(String input, int index) {
+        int line = 1;
+        for (int i = 0; i < index; i++) {
+            char c = input.charAt(i);
+            if (c == '\r') {
+                line++;
+                if (i + 1 < index && input.charAt(i + 1) == '\n') {
+                    i++;
+                }
+            } else if (c == '\n') {
+                line++;
+            }
+        }
+
+        return line;
     }
 
     /**
@@ -106,7 +130,7 @@ class Parser {
      */
     Entry parseEntry(String entryStr) {
         entryStr = entryStr.strip();
-        Matcher entryMatcher = Patterns.getInstance().matchEntry(entryStr);
+        Matcher entryMatcher = SingletonPatterns.getInstance().matchEntry(entryStr);
 
         if (!entryMatcher.find() || entryMatcher.groupCount() < 2) {
             return null;
@@ -141,7 +165,7 @@ class Parser {
             System.out.println("entry without key value structure: " + entryMatcher.group(0));
             return null;
         }
-        Matcher fieldMatcher = Patterns.getInstance().matchField(keyValueStructure);
+        Matcher fieldMatcher = SingletonPatterns.getInstance().matchField(keyValueStructure);
 
         // Find key value combination
         while (fieldMatcher.find()) {
@@ -186,7 +210,7 @@ class Parser {
         Object value;
         Field.Type type;
 
-        Patterns patterns = Patterns.getInstance();
+        SingletonPatterns patterns = SingletonPatterns.getInstance();
 
         Matcher stringMatcher = patterns.matchString(input);
         Matcher numberMatcher = patterns.matchNumber(input);
@@ -237,36 +261,12 @@ class Parser {
     }
 
     /**
-     * Get line number from byte index.
-     *
-     * @param input input multiline string
-     * @param index index of the cursor position
-     * @return line number
-     */
-    private int getLineNumber(String input, int index) {
-        int line = 1;
-        for (int i = 0; i < index; i++) {
-            char c = input.charAt(i);
-            if (c == '\r') {
-                line++;
-                if (i + 1 < index && input.charAt(i + 1) == '\n') {
-                    i++;
-                }
-            } else if (c == '\n') {
-                line++;
-            }
-        }
-
-        return line;
-    }
-
-    /**
      * Holds instance of this singleton class.
      */
     private static class ParserHolder {
         /**
          * Instance of this singleton class.
          */
-        private static final Parser INSTANCE = new Parser();
+        private static final SingletonParser INSTANCE = new SingletonParser();
     }
 }

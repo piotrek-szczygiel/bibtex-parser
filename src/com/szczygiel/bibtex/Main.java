@@ -5,7 +5,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 import java.io.File;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -52,13 +52,13 @@ public class Main implements Runnable {
      */
     @Option(names = {"-a", "--author"}, split = ",", paramLabel = "AUTHOR", description = "author(s) last name(s) to " +
             "search for")
-    private Set<String> authors = new HashSet<>();
+    private Set<String> authors = new LinkedHashSet<>();
 
     /**
      * Entry types used for filtering.
      */
     @Option(names = {"-t", "--type"}, split = ",", paramLabel = "TYPE", description = "entry type(s) to search for")
-    private Set<String> entryTypes = new HashSet<>();
+    private Set<String> entryTypes = new LinkedHashSet<>();
 
     /**
      * Entry point of the program.
