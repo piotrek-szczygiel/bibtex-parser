@@ -83,6 +83,7 @@ public class Main implements Runnable {
         if (document.loadFile(file)) {
             document.parse();
 
+            // Filter entries
             List<Entry> filteredEntries = document.getEntries();
             if (!entryTypes.isEmpty()) {
                 filteredEntries = Filter.filterTypes(filteredEntries, entryTypes);
@@ -91,6 +92,17 @@ public class Main implements Runnable {
                 filteredEntries = Filter.filterAuthors(filteredEntries, authors);
             }
 
+            // Display filtered entries count
+            int entriesCount = filteredEntries.size();
+            if (entriesCount == 0) {
+                System.out.println("No entries matched specified filters.\n");
+            } else if (entriesCount == 1) {
+                System.out.println("Showing 1 entry:");
+            } else {
+                System.out.println("Showing " + entriesCount + " entries:");
+            }
+
+            // Display filtered entries
             for (Entry entry : filteredEntries) {
                 System.out.println("\n\n" + PrettyFormat.table(entry));
             }
