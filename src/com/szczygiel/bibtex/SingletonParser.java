@@ -154,6 +154,7 @@ class SingletonParser {
 
         String citationKey = entryMatcher.group(2);
         if (citationKey != null) {
+            citationKey = citationKey.toLowerCase();
             entry.setCitationKey(citationKey);
         } else if (!entryType.equals("string")) { // Everything but @String need citation key
             System.err.println("entry without citation key: " + entryMatcher.group(0));

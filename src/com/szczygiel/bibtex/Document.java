@@ -131,6 +131,7 @@ public class Document {
                 if (field.getKey().equals("crossref") && field.getType() == Field.Type.STRING) {
                     crossreferences = true;
                     String crossref = (String) field.getValue();
+                    crossref = crossref.toLowerCase();
 
                     // Entry crossreferencing itself
                     if (crossref.equals(entry.getCitationKey())) {
