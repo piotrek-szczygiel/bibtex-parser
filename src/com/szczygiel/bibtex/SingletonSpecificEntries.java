@@ -77,6 +77,11 @@ class SingletonSpecificEntries {
                 new SpecificEntry(
                         List.of("author", "title", "note"),
                         List.of("month", "year", "key")));
+        specificEntries.put("proceedings",
+                new SpecificEntry(
+                        List.of("title", "year"),
+                        List.of("editor", "volume", "number", "series", "address", "month", "publisher",
+                                "organization", "note", "key")));
     }
 
     /**
