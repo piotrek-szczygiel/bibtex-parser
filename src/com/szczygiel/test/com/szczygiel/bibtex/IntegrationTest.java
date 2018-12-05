@@ -131,6 +131,7 @@ public class IntegrationTest {
         assertEquals(bookletFull.toString(), correctBookletFull);
         assertEquals(inproceedingsFull.toString(), correctInproceedingsFull);
 
+        // Test last names
         assertEquals(bookFull.getAuthorsLastNames(), Set.of("Knuth"));
         assertEquals(bookletFull.getAuthorsLastNames(), Set.of("Knuth"));
         assertEquals(inproceedingsFull.getAuthorsLastNames(), Set.of("Oaho", "Ullman", "Yannakakis", "Oz"));
